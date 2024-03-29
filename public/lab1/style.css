@@ -23,9 +23,7 @@ h2.h22 {
     color: brown;
 }
 
-.wtext,
-p,
-ul {
+.wtext {
     color: black;
     font-family: 'Courier New', Courier, monospace;
     font-style: italic;
