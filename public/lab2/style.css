@@ -2,10 +2,18 @@ textarea {
     display: block;
     width: 50%;
     height: 150px;
-    padding: 0;
-    margin: 0;
+
 }
 
-.szin{
+.szin {
     color: red;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+}
+
+h1 {
+    text-align: center;
 }

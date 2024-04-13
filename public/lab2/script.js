@@ -1,5 +1,7 @@
-function szinez(figyeltText, beirtText) {
-  const figyelt = figyeltText.value.split(' ');
+function szinez(beirtText) {
+  const figyeltText = document.getElementById('figyeltszoveg');
+  let figyelt = figyeltText.value.trim();
+  figyelt = figyelt.split(' ');
   let beirt = beirtText.value;
   const box = document.getElementById('cb');
 
@@ -13,13 +15,22 @@ function szinez(figyeltText, beirtText) {
     }
     beirt = beirt.replace(regex, `<span class="szin">${resz}</span>`);
   }
-  document.getElementsByClassName('eredmeny')[0].innerHTML = beirt;
+  //document.getElementsByClassName('eredmeny')[0].innerHTML = beirt;
+  let elem = document.getElementById('eredmeny');
+  let gyerek = elem.childNodes;
+  for (let i = 0; i < gyerek.length; i++) {
+    elem.removeChild(gyerek[i]);
+  }
+  elem.appendChild(document.createTextNode(beirt));
 }
 
 window.onload = () => {
-  const figyeltText = document.getElementById('figyeltszoveg');
   const beirtText = document.getElementById('beirtszoveg');
   beirtText.addEventListener('input', () => {
-    szinez(figyeltText, beirtText);
+    szinez(beirtText);
+  });
+
+  document.getElementById('cb').addEventListener('input', () => {
+    szinez(beirtText);
   });
 };
