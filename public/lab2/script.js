@@ -15,9 +15,8 @@ function szinez(beirtText) {
     }
     beirt = beirt.replace(regex, `<span class="szin">${resz}</span>`);
   }
-  //document.getElementsByClassName('eredmeny')[0].innerHTML = beirt;
-  let elem = document.getElementById('eredmeny');
-  let gyerek = elem.childNodes;
+  const elem = document.getElementById('eredmeny');
+  const gyerek = elem.childNodes;
   for (let i = 0; i < gyerek.length; i++) {
     elem.removeChild(gyerek[i]);
   }
