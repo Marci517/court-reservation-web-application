@@ -3,9 +3,9 @@ function szinez(figyeltText, beirtText) {
   let beirt = beirtText.value;
   const box = document.getElementById('cb');
 
-  for (const resz of figyelt) {
+  for (let i = 0; i < figyelt.length; i++) {
+    const resz = figyelt[i];
     let regex;
-
     if (box.checked) {
       regex = new RegExp(resz, 'g');
     } else {
