@@ -3,17 +3,15 @@ function szinez(figyeltText, beirtText) {
   let beirt = beirtText.value;
   const box = document.getElementById('cb');
 
-  for (const f in figyelt) {
-    const resz = figyelt[f];
+  for (const resz of figyelt) {
     let regex;
-    if (resz != ' ') {
-      if (box.checked) {
-        regex = new RegExp(resz, 'g');
-      } else {
-        regex = new RegExp(resz, 'gi');
-      }
-      beirt = beirt.replace(regex, `<span class="szin">${resz}</span>`);
+
+    if (box.checked) {
+      regex = new RegExp(resz, 'g');
+    } else {
+      regex = new RegExp(resz, 'gi');
     }
+    beirt = beirt.replace(regex, `<span class="szin">${resz}</span>`);
   }
   document.getElementsByClassName('eredmeny')[0].innerHTML = beirt;
 }
