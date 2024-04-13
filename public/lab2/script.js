@@ -1,3 +1,3 @@
 window.onload = () => {
-    console.log('Hello from JS');
+  console.log('Hello from JS');
 };
