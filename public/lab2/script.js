@@ -1,10 +1,10 @@
 function szinez(figyeltText, beirtText) {
-  let figyelt = figyeltText.value.split(' ');
+  const figyelt = figyeltText.value.split(' ');
   let beirt = beirtText.value;
-  let box = document.getElementById('cb');
+  const box = document.getElementById('cb');
 
-  for (let f in figyelt) {
-    let resz = figyelt[f];
+  for (const f in figyelt) {
+    const resz = figyelt[f];
     let regex;
     if (resz != ' ') {
       if (box.checked) {
@@ -19,8 +19,8 @@ function szinez(figyeltText, beirtText) {
 }
 
 window.onload = () => {
-  let figyeltText = document.getElementById('figyeltszoveg');
-  let beirtText = document.getElementById('beirtszoveg');
+  const figyeltText = document.getElementById('figyeltszoveg');
+  const beirtText = document.getElementById('beirtszoveg');
   beirtText.addEventListener('input', () => {
     szinez(figyeltText, beirtText);
   });
