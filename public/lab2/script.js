@@ -1,11 +1,26 @@
 function szinez(beirtText, figyeltText, box) {
-  const figyelt = figyeltText.value.trim().split(' ');
-  const beirt = beirtText.value.trim().split(' ');
   const elem = document.getElementById('eredmeny');
-
   while (elem.firstChild) {
     elem.removeChild(elem.firstChild);
   }
+
+  if (!beirtText.value.trim()) {
+    return;
+  }
+
+  if (!figyeltText.value.trim()) {
+    const text = beirtText.value;
+    for (let j = 0; j < text.length; j++) {
+      const span = document.createElement('span');
+      span.textContent = text[j];
+      span.classList.add('fekete');
+      elem.appendChild(span);
+    }
+    return;
+  }
+
+  const figyelt = figyeltText.value.trim().split(' ');
+  const beirt = beirtText.value.trim().split(' ');
 
   for (let i = 0; i < beirt.length; i++) {
     const logtomb = [];
