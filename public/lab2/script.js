@@ -1,11 +1,12 @@
-function szinez(beirtText, figyeltText, box) {
-  const elem = document.getElementById('eredmeny');
+function clearElement(elem) {
   while (elem.firstChild) {
     elem.removeChild(elem.firstChild);
   }
+}
 
+function checkEmpty(beirtText, figyeltText, elem) {
   if (!beirtText.value.trim()) {
-    return;
+    return true;
   }
 
   if (!figyeltText.value.trim()) {
@@ -16,6 +17,17 @@ function szinez(beirtText, figyeltText, box) {
       span.classList.add('fekete');
       elem.appendChild(span);
     }
+    return true;
+  }
+
+  return false;
+}
+
+function szinez(beirtText, figyeltText, box) {
+  const elem = document.getElementById('eredmeny');
+
+  clearElement(elem);
+  if (checkEmpty(beirtText, figyeltText, elem)) {
     return;
   }
 
