@@ -20,7 +20,7 @@ app.post('/kliensszur', express.urlencoded({ extended: true }), (req, res) => {
   const data = req.body;
   const expected = Joi.object({
     f3orabermin: Joi.number().min(0).required(),
-    f3orabermax: Joi.number().required(),
+    f3orabermax: Joi.number().min(0).required(),
     palyakkliens: Joi.string().required(),
   });
 
@@ -30,9 +30,18 @@ app.post('/kliensszur', express.urlencoded({ extended: true }), (req, res) => {
     const err = 'Helytelen bemenet!';
     res.status(400).send(err);
   } else {
-    console.log('okes a dolog');
-    const msg = 'szia';
-    res.send(msg);
+    const min = parseInt(data.f3orabermin, 10);
+    const max = parseInt(data.f3orabermax, 10);
+
+    if (min > max) {
+      console.log('Helytelen!');
+      const err = 'Min oraber nagyobb mint a max oraber!!!';
+      res.status(400).send(err);
+    } else {
+      console.log('okes a dolog');
+      const msg = 'szia';
+      res.send(msg);
+    }
   }
 });
 
