@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms lab 3</title>
+</head>
+<body>
+    <form action = "/palyabevezet" method = "POST">
+        <label for = "palyak">Valassz egy palyat: </label>
+        <select name = "palyak" id="palyak">
+            <option value="kosar">Kosar</option>
+            <option value="foci">Foci</option>
+            <option value="tenisz">Tenisz</option>
+            <option value="futas">Futas</option>
+        </select>
+        <label for = "f0oraber">Add meg az orabert: </label>
+        <input type = "text" name = "f0oraber" id = "f0oraber">
+        <label for = "f0cim">Add meg a cimet: </label>
+        <input type = "text" name = "f0cim" id = "f0cim">
+        <label for = "f0leiras">Add meg a leirast: </label>
+        <input type = "text" name = "f0leiras" id = "f0leiras">
+        <input type="submit" value="Submit">
+    </form>
+
+    <form action = "/kepfeltolt" method = "POST">
+        <label for = "f1palyaid">Add meg a palyaidt: </label>
+        <input type = "text" name = "f1palyaid" id = "f1palyaid">
+        <label for = "f1kep">Tolts fel egy kepet: </label>
+        <input type = "file" name = "f1kep" id>
+        <input type="submit" value="Submit">
+    </form>
+
+    <form action = "/kliensszur" method = "POST">
+        <label for = "palyakkliens">Valassz egy palyat: </label>
+        <select name = "palyakkliens" id="palyakkliens">
+            <option value="kosarkliens">Kosar</option>
+            <option value="focikliens">Foci</option>
+            <option value="teniszkliens">Tenisz</option>
+            <option value="futaskliens">Futas</option>
+        </select>
+
+        <label for = "f3orabermin">Add meg a minimum orabert: </label>
+        <input type = "text" name = "f3orabermin" id = "f3orabermin">
+
+        <label for = "f3orabermax">Add meg a maximum orabert: </label>
+        <input type = "text" name = "f3orabermax" id = "f3orabermax">
+        <input type="submit" value="Submit">
+
+    </form>
+
+</body>
+</html>
