@@ -1,15 +1,26 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import Joi from 'joi';
-import { join } from 'path';
+import path from 'path';
 import multer from 'multer';
+import fs from 'fs';
+
+function deleteFile(filePath) {
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error('Hiba történt a fájl törlése közben:', err);
+    } else {
+      console.log('A fájl sikeresen törölve.');
+    }
+  });
+}
 
 const app = express();
-const informations = [];
+const informations = {};
 
-app.use(express.static(join(process.cwd(), 'static')));
+app.use(express.static(path.join(process.cwd(), 'static')));
 
-const uploadDir = join(process.cwd(), 'uploadDir');
+const uploadDir = path.join(process.cwd(), 'uploadDir');
 
 const multerUpload = multer({
   dest: uploadDir,
@@ -34,13 +45,19 @@ app.post('/palyabevezet', express.urlencoded({ extended: true }), (req, res) => 
     console.log('Helytelen bemenet a palyabevezetnel!');
     const err = 'Helytelen bemenet!';
     res.status(400).send(err);
-  } else {
-    console.log(data);
-    const newid = uuidv4();
-    informations.push([newid, data.palyak, data.f0oraber, data.f0cim, data.f0leiras, 'Nincs kep csatolva hozza']);
-    console.log(`informations: ${informations[informations.length - 1]}`);
-    res.send(newid);
+    return;
   }
+  console.log(data);
+  const newid = uuidv4();
+  informations[newid] = {
+    palyak: data.palyak,
+    f0oraber: data.f0oraber,
+    f0cim: data.f0cim,
+    f0leiras: data.f0leiras,
+    kep: 'Nincs kep csatolva hozza',
+  };
+  console.log(`informations: ${JSON.stringify(informations[newid])}`);
+  res.send(newid);
 });
 
 app.post('/kepfeltolt', multerUpload.single('f1kep'), (req, res) => {
@@ -56,44 +73,40 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), (req, res) => {
   if (!fileHandler) {
     console.log('Nincs feltoltve kep!');
     res.status(400).send('Nincs feltoltve kep!');
-  } else if (!fileHandler.mimetype.startsWith('image/')) {
+    return;
+  }
+  const filePath = path.join(uploadDir, fileHandler.filename);
+  if (!fileHandler.mimetype.startsWith('image/')) {
     console.log('A feltoltott allomany nem kep formatum!');
     res.status(400).send('A feltoltott allomany nem kep formatumu!');
-  } else {
-    const { error } = expected.validate(data);
-    if (error != null) {
-      console.log('Helytelen bemenet a kepfeltoltnel!');
-      const err = 'Helytelen bemenet!';
-      res.status(400).send(err);
-    } else {
-      let log = false;
-      for (let i = 0; i < informations.length; i++) {
-        if (informations[i][0] === data.f1palyaid) {
-          log = true;
-        }
-      }
-      if (log) {
-        console.log('sikeresen feltoltve a kep');
-        for (let i = 0; i < informations.length; i++) {
-          if (informations[i][0] === data.f1palyaid) {
-            informations[i][5] = fileHandler.originalname;
-            console.log(informations[i][5]);
-          }
-        }
+    deleteFile(filePath);
+    return;
+  }
+  const { error } = expected.validate(data);
+  if (error != null) {
+    console.log('Helytelen bemenet a kepfeltoltnel!');
+    const err = 'Helytelen bemenet!';
+    res.status(400).send(err);
+    deleteFile(filePath);
+    return;
+  }
 
-        const msg = `Sikeres feltoltes:
+  if (informations[data.f1palyaid]) {
+    informations[data.f1palyaid].kep = fileHandler.originalname;
+    console.log(`uj kep: ${JSON.stringify(informations[data.f1palyaid])}`);
+  } else {
+    console.log('nincs ilyen id');
+    const err = 'Nem letezo id!';
+    res.status(400).send(err);
+    deleteFile(filePath);
+    return;
+  }
+  const msg = `Sikeres feltoltes:
         allomanynev: ${fileHandler.originalname}
         nev a szerveren: ${fileHandler.path}
         meret: ${fileHandler.size}
         mime-type: ${fileHandler.mimetype}`;
-        res.send(msg);
-      } else {
-        console.log('nincs ilyen id');
-        const err = 'Nem letezo id!';
-        res.status(400).send(err);
-      }
-    }
-  }
+  res.send(msg);
 });
 
 app.post('/kliensszur', express.urlencoded({ extended: true }), (req, res) => {
@@ -110,48 +123,45 @@ app.post('/kliensszur', express.urlencoded({ extended: true }), (req, res) => {
     console.log('Helytelen bemenet a kliensszurnel!');
     const err = 'Helytelen bemenet!';
     res.status(400).send(err);
-  } else {
-    const min = parseInt(data.f3orabermin, 10);
-    const max = parseInt(data.f3orabermax, 10);
-
-    if (min > max) {
-      console.log('Helytelen kliensszurnel, min > max miatt!');
-      const err = 'Min oraber nagyobb mint a max oraber!!!';
-      res.status(400).send(err);
-    } else {
-      console.log('szurunk palyat az infok alapjan');
-      console.log(data);
-      let log = false;
-      const msg = [];
-      for (let i = 0; i < informations.length; i++) {
-        if (
-          informations[i][1] === data.palyakkliens &&
-          informations[i][2] >= data.f3orabermin &&
-          informations[i][2] <= data.f3orabermax
-        ) {
-          log = true;
-          msg[i] = `A palya tipusa: ${informations[i][1]}
-                       Oraber: ${informations[i][2]}
-                       Cim: ${informations[i][3]}
-                       Leiras: ${informations[i][4]}
-                       Kep: ${informations[i][5]}`;
-        }
-      }
-      if (!log) {
-        console.log('Nincs keresett palya');
-        const msgerr = 'Nem letezik ilyen palya!';
-        res.send(msgerr);
-      } else {
-        let textResponse = 'Palyak:\n';
-        msg.forEach((i) => {
-          textResponse += `${i}\n\n`;
-        });
-
-        res.set('Content-Type', 'text/plain;charset=utf-8');
-        res.send(textResponse);
-      }
-    }
+    return;
   }
+  const min = parseInt(data.f3orabermin, 10);
+  const max = parseInt(data.f3orabermax, 10);
+
+  if (min > max) {
+    console.log('Helytelen kliensszurnel, min > max miatt!');
+    const err = 'Min oraber nagyobb mint a max oraber!!!';
+    res.status(400).send(err);
+    return;
+  }
+  console.log('szurunk palyat az infok alapjan');
+  console.log(data);
+  let log = false;
+  const msg = [];
+  Object.keys(informations).forEach((key) => {
+    const info = informations[key];
+    if (info.palyak === data.palyakkliens && info.f0oraber >= min && info.f0oraber <= max) {
+      log = true;
+      msg.push(`A palya tipusa: ${info.palyak}
+                       Oraber: ${info.f0oraber}
+                       Cim: ${info.f0cim}
+                       Leiras: ${info.f0leiras}
+                       Kep: ${info.kep}`);
+    }
+  });
+  if (!log) {
+    console.log('Nincs keresett palya');
+    const msgerr = 'Nem letezik ilyen palya!';
+    res.send(msgerr);
+    return;
+  }
+  let textResponse = 'Palyak:\n';
+  msg.forEach((i) => {
+    textResponse += `${i}\n\n`;
+  });
+
+  res.set('Content-Type', 'text/plain;charset=utf-8');
+  res.send(textResponse);
 });
 
 app.listen(8000, () => {
