@@ -1,9 +1,9 @@
 import express from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import Joi from 'joi';
 import path from 'path';
 import multer from 'multer';
 import fs from 'fs';
+import { addPalya, addFenykep, getPalyak } from './db.js';
 
 function deleteFile(filePath) {
   fs.unlink(filePath, (err) => {
@@ -16,7 +16,6 @@ function deleteFile(filePath) {
 }
 
 const app = express();
-const informations = {};
 
 app.use(express.static(path.join(process.cwd(), 'static')));
 
@@ -47,17 +46,10 @@ app.post('/palyabevezet', express.urlencoded({ extended: true }), (req, res) => 
     res.status(400).send(err);
     return;
   }
-  console.log(data);
-  const newid = uuidv4();
-  informations[newid] = {
-    palyak: data.palyak,
-    f0oraber: data.f0oraber,
-    f0cim: data.f0cim,
-    f0leiras: data.f0leiras,
-    kep: 'Nincs kep csatolva hozza',
-  };
-  console.log(`informations: ${JSON.stringify(informations[newid])}`);
-  res.send(newid);
+
+  const results = addPalya(data.palyak, data.f0oraber, data.f0cim, data.f0leiras);
+  res.json(results);
+  console.log('Sikeres feltoltes');
 });
 
 app.post('/kepfeltolt', multerUpload.single('f1kep'), (req, res) => {
@@ -65,7 +57,6 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), (req, res) => {
   const fileHandler = req.file;
 
   const data = req.body;
-  console.log(data);
   const expected = Joi.object({
     f1palyaid: Joi.string().required(),
   });
@@ -91,25 +82,11 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), (req, res) => {
     return;
   }
 
-  if (informations[data.f1palyaid]) {
-    informations[data.f1palyaid].kep = fileHandler.originalname;
-    console.log(`uj kep: ${JSON.stringify(informations[data.f1palyaid])}`);
-  } else {
-    console.log('nincs ilyen id');
-    const err = 'Nem letezo id!';
-    res.status(400).send(err);
-    deleteFile(filePath);
-    return;
-  }
-  const msg = `Sikeres feltoltes:
-        allomanynev: ${fileHandler.originalname}
-        nev a szerveren: ${fileHandler.path}
-        meret: ${fileHandler.size}
-        mime-type: ${fileHandler.mimetype}`;
-  res.send(msg);
+  const results = addFenykep(data.f1palyaid, fileHandler.originalname);
+  res.json(results);
 });
 
-app.post('/kliensszur', express.urlencoded({ extended: true }), (req, res) => {
+app.post('/kliensszur', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('bent a klienszurben');
   const data = req.body;
   const expected = Joi.object({
@@ -136,32 +113,21 @@ app.post('/kliensszur', express.urlencoded({ extended: true }), (req, res) => {
   }
   console.log('szurunk palyat az infok alapjan');
   console.log(data);
-  let log = false;
-  const msg = [];
-  Object.keys(informations).forEach((key) => {
-    const info = informations[key];
-    if (info.palyak === data.palyakkliens && info.f0oraber >= min && info.f0oraber <= max) {
-      log = true;
-      msg.push(`A palya tipusa: ${info.palyak}
-                       Oraber: ${info.f0oraber}
-                       Cim: ${info.f0cim}
-                       Leiras: ${info.f0leiras}
-                       Kep: ${info.kep}`);
-    }
-  });
-  if (!log) {
+
+  getPalyak(data.palyakkliens, data.f3orabermin, data.f3orabermax);
+
+  const results = await getPalyak(data.palyakkliens, data.f3orabermin, data.f3orabermax);
+
+  if (results.length === 0) {
     console.log('Nincs keresett palya');
-    const msgerr = 'Nem letezik ilyen palya!';
+    const msgerr = 'Nem létezik ilyen pálya!';
     res.send(msgerr);
     return;
   }
-  let textResponse = 'Palyak:\n';
-  msg.forEach((i) => {
-    textResponse += `${i}\n\n`;
-  });
 
-  res.set('Content-Type', 'text/plain;charset=utf-8');
-  res.send(textResponse);
+  console.log('Sikeres lekerdezes!');
+  console.log(results);
+  res.send(results[0]);
 });
 
 app.listen(8000, () => {
