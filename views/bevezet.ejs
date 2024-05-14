@@ -23,16 +23,20 @@
             <option value="futas">Futas</option>
         </select>
         <label for="f0oraber">Add meg az orabert: </label>
-        <input type="number" name="f0oraber" id="f0oraber" min="0" required>
+        <input type="number" name="f0oraber" id="f0oraber" min="0" max="100000" required>
         <label for="f0cim">Add meg a cimet: </label>
         <input type="text" name="f0cim" id="f0cim" required>
         <label for="f0leiras">Add meg a leirast: </label>
         <input type="text" name="f0leiras" id="f0leiras" required>
         <button type="submit">Submit</button>
     </form>
-    <footer>
-        Bencze Marton, bmim2214, 521, lab4
-    </footer>
+
+    <% if (err===1) { %>
+        <p>Helytelen bemenet</p>
+        <% } %>
+            <footer>
+                Bencze Marton, bmim2214, 521, lab4
+            </footer>
 
 </body>
 

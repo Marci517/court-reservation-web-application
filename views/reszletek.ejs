@@ -21,25 +21,32 @@
     <% const pid=result[0].PID; %>
 
         <% result.forEach(resul=> { %>
-            <li>
-                <% if (resul.FNev==="Nincs kep hozzaadva" ) { %>
-                    <span>Kepek: <%= resul.FNev %> </span>
-                    <% } else { %>
-                        <img src="<%=resul.FNev%>" alt="Nem elerheto">
-                        <% } %>
+            <% if (resul.FNev==="Nincs kep hozzaadva" ) { %>
+                <span>Kepek: <%= resul.FNev %> </span>
+                <% } else { %>
+                    <img src="<%=resul.FNev%>" alt="Nem elerheto">
+                    <% } %>
+                        <% }); %>
+                            <form action="/kepfeltolt" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="f1palyaid" id="f1palyaid" value="<%= pid %>">
+                                <label for="f1kep">Tolts fel egy kepet: </label>
+                                <input type="file" name="f1kep" id="f1kep" required>
+                                <button type="submit">Submit</button>
+                            </form>
+                            <% if (err===1) { %>
+                                <p>Nincs feltoltve kep</p>
+                                <% } %>
+                                    <% if (err===2) { %>
+                                        <p>A feltoltott file nem kepformatumu</p>
+                                        <% } %>
 
-            </li>
-            <% }); %>
-                <form action="/kepfeltolt" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="f1palyaid" id="f1palyaid" value="<%= pid %>">
-                    <label for="f1kep">Tolts fel egy kepet: </label>
-                    <input type="file" name="f1kep" id="f1kep" required>
-                    <button type="submit">Submit</button>
-                </form>
+                                            <% if (err===3) { %>
+                                                <p>Helytelen bemenet(id)</p>
+                                                <% } %>
 
-                <footer>
-                    Bencze Marton, bmim2214, 521, lab4
-                </footer>
+                                                    <footer>
+                                                        Bencze Marton, bmim2214, 521, lab4
+                                                    </footer>
 
 </body>
 

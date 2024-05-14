@@ -3,7 +3,7 @@ import Joi from 'joi';
 import path from 'path';
 import multer from 'multer';
 import fs from 'fs';
-import { addPalya, addFenykep, getPalyak, getAllPalyak, getPalya, getCountFenykepek } from './db.js';
+import { addPalya, addFenykep, getPalyak, getPalya, getCountFenykepek, getPalyak2 } from './db.js';
 
 function deleteFile(filePath) {
   fs.unlink(filePath, (err) => {
@@ -13,6 +13,19 @@ function deleteFile(filePath) {
       console.log('A fájl sikeresen törölve.');
     }
   });
+}
+
+function getminmaxnev(data) {
+  if (!data.f3orabermin) {
+    data.f3orabermin = '0';
+  }
+  if (!data.f3orabermax) {
+    data.f3orabermax = '100000';
+  }
+  if (!data.palyakkliens) {
+    data.palyakkliens = 'osszes';
+  }
+  return data;
 }
 
 const app = express();
@@ -32,21 +45,23 @@ const multerUpload = multer({
 });
 
 app.get('/bevezet', (req, res) => {
-  res.render('bevezet');
+  console.log('bent a bevezetben');
+  res.render('bevezet', {
+    err: 0,
+  });
 });
 
 app.get('/reszletek', async (req, res) => {
+  console.log('bent a reszeletekben');
   const pid = req.query;
-  console.log(pid.id);
   const result = await getPalya(pid.id);
   console.log(result[0]);
-  console.log('reszletek voltak');
   if (result[0][0].FNev === null) {
     result[0][0].FNev = 'Nincs kep hozzaadva';
   }
-  console.log(result[0][0][5]);
   res.render('reszletek', {
     result: result[0],
+    err: 0,
   });
 });
 
@@ -56,7 +71,7 @@ app.post('/palyabevezet', express.urlencoded({ extended: true }), async (req, re
 
   const expected = Joi.object({
     palyak: Joi.string().required(),
-    f0oraber: Joi.number().min(0).required(),
+    f0oraber: Joi.number().min(0).max(100000).required(),
     f0cim: Joi.string().required(),
     f0leiras: Joi.string().required(),
   });
@@ -64,8 +79,9 @@ app.post('/palyabevezet', express.urlencoded({ extended: true }), async (req, re
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Helytelen bemenet a palyabevezetnel!');
-    const err = 'Helytelen bemenet!';
-    res.status(400).send(err);
+    res.render('bevezet', {
+      err: 1,
+    });
     return;
   }
 
@@ -85,28 +101,40 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
 
   if (!fileHandler) {
     console.log('Nincs feltoltve kep!');
-    res.status(400).send('Nincs feltoltve kep!');
+    const result = await getPalya(data.f1palyaid);
+    res.render('reszletek', {
+      result: result[0],
+      err: 1,
+    });
     return;
   }
   const filePath = path.join(uploadDir, fileHandler.filename);
   if (!fileHandler.mimetype.startsWith('image/')) {
     console.log('A feltoltott allomany nem kep formatum!');
-    res.status(400).send('A feltoltott allomany nem kep formatumu!');
+    const result = await getPalya(data.f1palyaid);
+    res.render('reszletek', {
+      result: result[0],
+      err: 2,
+    });
     deleteFile(filePath);
     return;
   }
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Helytelen bemenet a kepfeltoltnel!');
-    const err = 'Helytelen bemenet!';
-    res.status(400).send(err);
+    const result = await getPalya(data.f1palyaid);
+    res.render('reszletek', {
+      result: result[0],
+      err: 3,
+    });
     deleteFile(filePath);
     return;
   }
 
-  const result = await getCountFenykepek(data.f1palyaid);
-  console.log(result);
-  const sorszam = result[0][0].kepek_szama + 1;
+  const kepek = await getCountFenykepek(data.f1palyaid);
+  console.log('a kepek szama az adott palyanak:');
+  console.log(kepek[0][0].kepek_szama);
+  const sorszam = kepek[0][0].kepek_szama + 1;
   const newFileName = `kep${data.f1palyaid}_${sorszam}.${fileHandler.originalname.split('.').pop()}`;
   const newFilePath = path.join(uploadDir, newFileName);
   fs.rename(filePath, newFilePath, (err) => {
@@ -118,44 +146,53 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   });
 
   await addFenykep(data.f1palyaid, newFileName);
-  res.redirect(`/reszletek?id=${data.f1palyaid}`);
+  const result = await getPalya(data.f1palyaid);
+  res.render('reszletek', {
+    result: result[0],
+    err: 0,
+  });
 });
 
 app.get('/', async (req, res) => {
   console.log('bent a klienszurben');
-  const data = req.query;
+  let data = req.query;
   let results = {};
-  console.log(data.f3orabermax);
-  if (data.f3orabermin && data.f3orabermax && data.palyakkliens) {
-    const expected = Joi.object({
-      f3orabermin: Joi.number().min(0).required(),
-      f3orabermax: Joi.number().min(0).required(),
-      palyakkliens: Joi.string().required(),
+  data = getminmaxnev(data);
+
+  const expected = Joi.object({
+    f3orabermin: Joi.number().min(0).required(),
+    f3orabermax: Joi.number().min(0).max(100000).required(),
+    palyakkliens: Joi.string().required(),
+  });
+
+  const { error } = expected.validate(data);
+  if (error != null) {
+    console.log('Helytelen bemenet a kliensszurnel!');
+    res.render('index', {
+      resul: results[0],
+      err: 3,
     });
-
-    const { error } = expected.validate(data);
-    if (error != null) {
-      console.log('Helytelen bemenet a kliensszurnel!');
-      const err = 'Helytelen bemenet!';
-      res.status(400).send(err);
-      return;
-    }
-    const min = parseInt(data.f3orabermin, 10);
-    const max = parseInt(data.f3orabermax, 10);
-
-    if (min > max) {
-      console.log('Helytelen kliensszurnel, min > max miatt!');
-      const err = 'Min oraber nagyobb mint a max oraber!!!';
-      res.status(400).send(err);
-      return;
-    }
-
-    results = await getPalyak(data.palyakkliens, data.f3orabermin, data.f3orabermax);
-    console.log('szurunk palyat az infok alapjan');
-    console.log(data);
-  } else {
-    results = await getAllPalyak();
+    return;
   }
+  const min = parseInt(data.f3orabermin, 10);
+  const max = parseInt(data.f3orabermax, 10);
+
+  if (min > max) {
+    console.log('Helytelen kliensszurnel, min > max miatt!');
+    res.render('index', {
+      resul: results[0],
+      err: 2,
+    });
+    return;
+  }
+
+  if (data.palyakkliens === 'osszes') {
+    results = await getPalyak2(data.f3orabermin, data.f3orabermax);
+  } else {
+    results = await getPalyak(data.palyakkliens, data.f3orabermin, data.f3orabermax);
+  }
+  console.log('szurunk palyat az infok alapjan');
+  console.log(data);
 
   if (results[0].length === 0) {
     console.log('Nincs keresett palya');
@@ -163,10 +200,8 @@ app.get('/', async (req, res) => {
       resul: results[0],
       err: 1,
     });
+    return;
   }
-  console.log(results[0]);
-
-  console.log('Sikeres lekerdezes!');
   res.render('index', {
     resul: results[0],
     err: 0,

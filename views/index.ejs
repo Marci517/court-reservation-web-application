@@ -20,6 +20,7 @@
     <form action="/" method="GET">
         <label for="palyakkliens">Valassz egy palyat: </label>
         <select name="palyakkliens" id="palyakkliens" required>
+            <option value="osszes">Osszes</option>
             <option value="kosar">Kosar</option>
             <option value="foci">Foci</option>
             <option value="tenisz">Tenisz</option>
@@ -27,33 +28,41 @@
         </select>
 
         <label for="f3orabermin">Add meg a minimum orabert: </label>
-        <input type="number" name="f3orabermin" id="f3orabermin" min="0" required>
+        <input type="number" name="f3orabermin" id="f3orabermin" min="0">
 
         <label for="f3orabermax">Add meg a maximum orabert: </label>
-        <input type="number" name="f3orabermax" id="f3orabermax" min="0" required>
+        <input type="number" name="f3orabermax" id="f3orabermax" min="0" max="100000">
         <button type="submit">Submit</button>
 
     </form>
-    <% if (err===1) { %>
-        <p>Nincs bevezetett pálya</p>
-        <% } else { %>
-            <ul>
-                <% resul.forEach(result=> { %>
-                    <li>
-                        <span>Palyatipus: <%= result.Nev %>, </span>
-                        <span>Oraber: <%= result.Oraber %>, </span>
-                        <span>Cim: <%= result.Cim %>, </span>
-                        <span>Leiras: <%= result.Leiras %>, </span>
-                        <a href="/reszletek?id=<%= result.PID %>">Részletek</a>
-                    </li>
-                    <% }); %>
-            </ul>
-            <% } %>
+    <% if (err===0) { %>
+        <ul>
+            <% resul.forEach(result=> { %>
+                <li>
+                    <span>Palyatipus: <%= result.Nev %>, </span>
+                    <span>Oraber: <%= result.Oraber %>, </span>
+                    <span>Cim: <%= result.Cim %>, </span>
+                    <span>Leiras: <%= result.Leiras %>, </span>
+                    <a href="/reszletek?id=<%= result.PID %>">Részletek</a>
+                </li>
+                <% }); %>
+        </ul>
+        <% } %>
+
+            <% if (err===2) { %>
+                <p>A minimum oraber nagyobb mint a maximum oraber!</p>
+                <% } %>
+                    <% if (err===3) { %>
+                        <p>Helytelen bemenet</p>
+                        <% } %>
+                            <% if (err===1) { %>
+                                <p>Nincs bevezetett palya!</p>
+                                <% } %>
 
 
-                <footer>
-                    Bencze Marton, bmim2214, 521, lab4
-                </footer>
+                                    <footer>
+                                        Bencze Marton, bmim2214, 521, lab4
+                                    </footer>
 
 </body>
 

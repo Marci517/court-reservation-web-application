@@ -22,6 +22,16 @@ export function getPalyak(nev, orabermin, orabermax) {
 
   return pool.query(sql, values);
 }
+
+export function getPalyak2(orabermin, orabermax) {
+  const sql = `SELECT p.PID, p.Nev, p.Cim, p.Oraber, p.Leiras
+  FROM Palyak AS p
+  WHERE p.Oraber <= ? AND p.Oraber >= ?`;
+  const values = [orabermax, orabermin];
+
+  return pool.query(sql, values);
+}
+
 export function getAllPalyak() {
   const sql = `SELECT p.PID, p.Nev, p.Cim, p.Oraber, p.Leiras
   FROM Palyak AS p`;
