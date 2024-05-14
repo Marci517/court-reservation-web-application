@@ -38,52 +38,72 @@
                                             <% if (err===3) { %>
                                                 <p>Helytelen bemenet(id)</p>
                                                 <% } %>
-                                                <form action="/foglalas" method="POST">
-                                                    <label for="felhasznalok">Valassz egy felhasznalot: </label>
-                                                    <select name="felhasznalok" id="felhasznalok" required>
-                                                        <% felhasznalok.forEach(fel => { %>
-                                                            <option value="<%= fel.FelNev %>"><%= fel.FelNev %></option>
-                                                        <% }); %>
-                                                    </select>
-                                                    <label for="f4kezd">Add meg a kezdesi idot: </label>
-                                                    <input type="time" name="f4kezd" id="f4kezd" required>
-                                                    <label for="f4vegez">Add meg a vegzesi idot: </label>
-                                                    <input type="time" name="f4vegez" id="f4vegez" required>
-                                                    <input type="hidden" name="f4palyaid" id="f4palyaid"
-                                                                value="<%= pid %>">
-                                                    <button type="submit">Submit</button>
-                                                </form>
-                                                <% if (err===4) { %>
-                                                    <p>Mar van foglalas ebben az intervallumban</p>
-                                                    <% } %>
-                                                    <% if (err===5) { %>
-                                                        <p>Helytelen bemenet a foglalasnal</p>
-                                                        <% } %>
-                                                        <% if (err===10) { %>
-                                                            <p>Sikeres foglalas!</p>
-                                                            <% } %>
-                                                            <% if (fog !== 1) { %>
-                                                                <% foglalasok.forEach(foglalas => { %>
-                                                                    <span>Datum: <%= foglalas.Datum %>, </span>
-                                                                    <span>Kezdes Idopont: <%= foglalas.Kezdes %>, </span>
-                                                                    <span>Vege: <%= foglalas.Vegzes %>, </span>
+                                                    <form action="/foglalas" method="POST">
+                                                        <label for="felhasznalok">Valassz egy felhasznalot: </label>
+                                                        <select name="felhasznalok" id="felhasznalok" required>
+                                                            <% felhasznalok.forEach(fel=> { %>
+                                                                <option value="<%= fel.FelNev %>">
+                                                                    <%= fel.FelNev %>
+                                                                </option>
                                                                 <% }); %>
-                                                            <% } else { %>
-                                                                <span>Nincs foglalás</span>
-                                                            <% } %>
-                                                            
-                                                    <footer>
-                                                        <form action="/kepfeltolt" method="POST"
-                                                            enctype="multipart/form-data">
-                                                            <input type="hidden" name="f1palyaid" id="f1palyaid"
-                                                                value="<%= pid %>">
-                                                            <label for="f1kep">Tolts fel egy kepet: </label>
-                                                            <input type="file" name="f1kep" id="f1kep" required>
-                                                            <button type="submit">Submit</button>
-                                                        </form>
+                                                        </select>
+                                                        <label for="f4kezd">Add meg a kezdesi idot: </label>
+                                                        <input type="time" name="f4kezd" id="f4kezd" required>
+                                                        <label for="f4vegez">Add meg a vegzesi idot: </label>
+                                                        <input type="time" name="f4vegez" id="f4vegez" required>
+                                                        <input type="hidden" name="f4palyaid" id="f4palyaid"
+                                                            value="<%= pid %>">
+                                                        <button type="submit">Submit</button>
+                                                    </form>
+                                                    <% if (err===4) { %>
+                                                        <p>Mar van foglalas ebben az intervallumban</p>
+                                                        <% } %>
+                                                            <% if (err===5) { %>
+                                                                <p>Helytelen bemenet a foglalasnal</p>
+                                                                <% } %>
+                                                                    <% if (err===10) { %>
+                                                                        <p>Sikeres foglalas!</p>
+                                                                        <% } %>
+                                                                            <% if (fog !==1) { %>
+                                                                                <% foglalasok.forEach(foglalas=> { %>
+                                                                                    <span>Datum: <%= foglalas.Datum %>,
+                                                                                    </span>
+                                                                                    <span>Kezdes Idopont: <%=
+                                                                                            foglalas.Kezdes %>, </span>
+                                                                                    <span>Vege: <%= foglalas.Vegzes %>,
+                                                                                    </span>
+                                                                                    <% }); %>
+                                                                                        <% } else { %>
+                                                                                            <span>Nincs foglalás</span>
+                                                                                            <% } %>
 
-                                                        Bencze Marton, bmim2214, 521, lab4
-                                                    </footer>
+                                                                                                <footer>
+                                                                                                    <form
+                                                                                                        action="/kepfeltolt"
+                                                                                                        method="POST"
+                                                                                                        enctype="multipart/form-data">
+                                                                                                        <input
+                                                                                                            type="hidden"
+                                                                                                            name="f1palyaid"
+                                                                                                            id="f1palyaid"
+                                                                                                            value="<%= pid %>">
+                                                                                                        <label
+                                                                                                            for="f1kep">Tolts
+                                                                                                            fel egy
+                                                                                                            kepet:
+                                                                                                        </label>
+                                                                                                        <input
+                                                                                                            type="file"
+                                                                                                            name="f1kep"
+                                                                                                            id="f1kep"
+                                                                                                            required>
+                                                                                                        <button
+                                                                                                            type="submit">Submit</button>
+                                                                                                    </form>
+
+                                                                                                    Bencze Marton,
+                                                                                                    bmim2214, 521, lab4
+                                                                                                </footer>
 
 </body>
 

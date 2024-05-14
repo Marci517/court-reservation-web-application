@@ -1,0 +1,46 @@
+CREATE DATABASE webprog;
+USE webprog;
+
+CREATE TABLE Palyak (
+    PID INT AUTO_INCREMENT PRIMARY KEY,
+    Nev VARCHAR(255) NOT NULL,
+    Cim TEXT,
+    Leiras TEXT,
+    Oraber DECIMAL NOT NULL
+);
+
+CREATE TABLE Felhasznalok (
+    FID INT AUTO_INCREMENT PRIMARY KEY,
+    FelNev VARCHAR(255) NOT NULL,
+    Tel VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Foglalasok (
+    FogID INT AUTO_INCREMENT PRIMARY KEY,
+    PID INT NOT NULL,
+    FID INT NOT NULL,
+    Datum DATETIME NOT NULL,
+    Kezdes TIME,
+    Vegzes TIME,
+    FOREIGN KEY (PID) REFERENCES Palyak(PID),
+    FOREIGN KEY (FID) REFERENCES Felhasznalok(FID)
+);
+
+
+CREATE TABLE Fenykepek (
+    FenyID INT AUTO_INCREMENT PRIMARY KEY,
+    PID INT NOT NULL,
+    FNev VARCHAR(255) NOT NULL,
+    FOREIGN KEY (PID) REFERENCES Palyak(PID)
+);
+
+INSERT INTO Felhasznalok (FelNev, Tel) VALUES
+('Marci', '03259853'),
+('Pisti', '123456'),
+('Joco', '23583579');
+
+
+
+
+
+
