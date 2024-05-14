@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+    <title>lab4</title>
+</head>
+
+<body>
+    <header>
+        <h1>
+            Palyak
+        </h1>
+    </header>
+    <form action="/bevezet" method="GET">
+        <button type="submit">Palya hozzaadas</button>
+    </form>
+    <form action="/" method="GET">
+        <label for="palyakkliens">Valassz egy palyat: </label>
+        <select name="palyakkliens" id="palyakkliens" required>
+            <option value="kosar">Kosar</option>
+            <option value="foci">Foci</option>
+            <option value="tenisz">Tenisz</option>
+            <option value="futas">Futas</option>
+        </select>
+
+        <label for="f3orabermin">Add meg a minimum orabert: </label>
+        <input type="number" name="f3orabermin" id="f3orabermin" min="0" required>
+
+        <label for="f3orabermax">Add meg a maximum orabert: </label>
+        <input type="number" name="f3orabermax" id="f3orabermax" min="0" required>
+        <button type="submit">Submit</button>
+
+    </form>
+    <% if (err===1) { %>
+        <p>Nincs bevezetett pálya</p>
+        <% } else { %>
+            <ul>
+                <% resul.forEach(result=> { %>
+                    <li>
+                        <span>Palyatipus: <%= result.Nev %>, </span>
+                        <span>Oraber: <%= result.Oraber %>, </span>
+                        <span>Cim: <%= result.Cim %>, </span>
+                        <span>Leiras: <%= result.Leiras %>, </span>
+                        <a href="/reszletek?id=<%= result.PID %>">Részletek</a>
+                    </li>
+                    <% }); %>
+            </ul>
+            <% } %>
+
+
+                <footer>
+                    Bencze Marton, bmim2214, 521, lab4
+                </footer>
+
+</body>
+
+</html>
