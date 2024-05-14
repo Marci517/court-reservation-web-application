@@ -3,7 +3,19 @@ import Joi from 'joi';
 import path from 'path';
 import multer from 'multer';
 import fs from 'fs';
-import { addPalya, addFenykep, getPalyak, getPalya, getCountFenykepek, getPalyak2 } from './db.js';
+import {
+  addPalya,
+  addFenykep,
+  getPalyak,
+  getPalya,
+  getCountFenykepek,
+  getPalyak2,
+  getFelhasznalokNevei,
+  getId,
+  addFoglalas,
+  getOverlaps,
+  getFoglalasok,
+} from './db.js';
 
 function deleteFile(filePath) {
   fs.unlink(filePath, (err) => {
@@ -55,13 +67,74 @@ app.get('/reszletek', async (req, res) => {
   console.log('bent a reszeletekben');
   const pid = req.query;
   const result = await getPalya(pid.id);
+  const felhasznalok = await getFelhasznalokNevei();
+  const foglalasok = await getFoglalasok(pid.id);
+  let fogcheck = 0;
+  if (foglalasok[0].length === 0) {
+    fogcheck = 1;
+  }
   console.log(result[0]);
   if (result[0][0].FNev === null) {
     result[0][0].FNev = 'Nincs kep hozzaadva';
   }
   res.render('reszletek', {
     result: result[0],
+    felhasznalok: felhasznalok[0],
     err: 0,
+    fog: fogcheck,
+    foglalasok: foglalasok[0],
+  });
+});
+
+app.post('/foglalas', express.urlencoded({ extended: true }), async (req, res) => {
+  console.log('bent a foglalasban');
+  const data = req.body;
+  const result = await getPalya(data.f4palyaid);
+  const felhasznalok = await getFelhasznalokNevei();
+  const foglalasok = await getFoglalasok(data.f4palyaid);
+  let fogcheck = 0;
+  if (foglalasok[0].length === 0) {
+    fogcheck = 1;
+  }
+  console.log(data);
+
+  const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+
+  if (!regex.test(data.f4kezd) || !regex.test(data.f4kezd)) {
+    console.log('Helytelen bemenet a foglalasnal!');
+    res.render('reszletek', {
+      result: result[0],
+      felhasznalok: felhasznalok[0],
+      err: 5,
+      fog: fogcheck,
+      foglalasok: foglalasok[0],
+    });
+    return;
+  }
+  const ellenorzo = await getOverlaps(data.f4palyaid, data.f4kezd, data.f4vegez);
+  if (ellenorzo[0].length !== 0) {
+    console.log('Mar van foglalas ebben az intervallumban');
+    res.render('reszletek', {
+      result: result[0],
+      felhasznalok: felhasznalok[0],
+      err: 4,
+      fog: fogcheck,
+      foglalasok: foglalasok[0],
+    });
+    return;
+  }
+  const felid = await getId(data.felhasznalok);
+  const today = new Date();
+  console.log(felid);
+  console.log(today);
+  await addFoglalas(felid[0][0].FID, data.f4palyaid, data.f4kezd, data.f4vegez, today);
+  const foglalasokuj = await getFoglalasok(data.f4palyaid);
+  res.render('reszletek', {
+    result: result[0],
+    felhasznalok: felhasznalok[0],
+    err: 10,
+    fog: fogcheck,
+    foglalasok: foglalasokuj[0],
   });
 });
 
@@ -92,9 +165,15 @@ app.post('/palyabevezet', express.urlencoded({ extended: true }), async (req, re
 
 app.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   console.log('bent a kepfeltoltben');
-  const fileHandler = req.file;
-
   const data = req.body;
+  const fileHandler = req.file;
+  const felhasznalok = await getFelhasznalokNevei();
+  const foglalasok = await getFoglalasok(data.f1palyaid);
+  let fogcheck = 0;
+  if (foglalasok[0].length === 0) {
+    fogcheck = 1;
+  }
+
   const expected = Joi.object({
     f1palyaid: Joi.string().required(),
   });
@@ -104,7 +183,10 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     const result = await getPalya(data.f1palyaid);
     res.render('reszletek', {
       result: result[0],
+      felhasznalok: felhasznalok[0],
       err: 1,
+      fog: fogcheck,
+      foglalasok: foglalasok[0],
     });
     return;
   }
@@ -114,7 +196,10 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     const result = await getPalya(data.f1palyaid);
     res.render('reszletek', {
       result: result[0],
+      felhasznalok: felhasznalok[0],
       err: 2,
+      fog: fogcheck,
+      foglalasok: foglalasok[0],
     });
     deleteFile(filePath);
     return;
@@ -125,7 +210,10 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     const result = await getPalya(data.f1palyaid);
     res.render('reszletek', {
       result: result[0],
+      felhasznalok: felhasznalok[0],
       err: 3,
+      fog: fogcheck,
+      foglalasok: foglalasok[0],
     });
     deleteFile(filePath);
     return;
@@ -149,7 +237,10 @@ app.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   const result = await getPalya(data.f1palyaid);
   res.render('reszletek', {
     result: result[0],
+    felhasznalok: felhasznalok[0],
     err: 0,
+    fog: fogcheck,
+    foglalasok: foglalasok[0],
   });
 });
 
