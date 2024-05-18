@@ -20,9 +20,11 @@ const router = express.Router();
 router.get('/reszletek', async (req, res) => {
   console.log('bent a reszeletekben');
   const pid = req.query;
-  const result = await getPalya(pid.id);
-  const felhasznalok = await getFelhasznalokNevei();
-  const foglalasok = await getFoglalasok(pid.id);
+  const [result, felhasznalok, foglalasok] = await Promise.all([
+    getPalya(pid.id),
+    getFelhasznalokNevei(),
+    getFoglalasok(pid.id),
+  ]);
   let fogcheck = 0;
   if (foglalasok[0].length === 0) {
     fogcheck = 1;
@@ -40,9 +42,11 @@ router.get('/reszletek', async (req, res) => {
 router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('bent a foglalasban');
   const data = req.body;
-  const result = await getPalya(data.f4palyaid);
-  const felhasznalok = await getFelhasznalokNevei();
-  let foglalasok = await getFoglalasok(data.f4palyaid);
+  const [result, felhasznalok, foglalasok] = await Promise.all([
+    getPalya(data.f4palyaid),
+    getFelhasznalokNevei(),
+    getFoglalasok(data.f4palyaid),
+  ]);
   let fogcheck = 0;
   if (foglalasok[0].length === 0) {
     fogcheck = 1;
@@ -79,12 +83,13 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
   console.log(felid);
   console.log(today);
   await addFoglalas(felid[0][0].FID, data.f4palyaid, data.f4kezd, data.f4vegez, today);
-  foglalasok = await getFoglalasok(data.f4palyaid);
+  const foglalasokuj = await getFoglalasok(data.f4palyaid);
+
   fogcheck = 0;
-  if (foglalasok[0].length === 0) {
+  if (foglalasokuj[0].length === 0) {
     fogcheck = 1;
   }
-  const foglalasokuj = await getFoglalasok(data.f4palyaid);
+
   res.render('reszletek', {
     result: result[0],
     felhasznalok: felhasznalok[0],
@@ -98,8 +103,13 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   console.log('bent a kepfeltoltben');
   const data = req.body;
   const fileHandler = req.file;
-  const felhasznalok = await getFelhasznalokNevei();
-  const foglalasok = await getFoglalasok(data.f1palyaid);
+  const [felhasznalok, foglalasok, result, kepek] = await Promise.all([
+    getFelhasznalokNevei(),
+    getFoglalasok(data.f1palyaid),
+    getPalya(data.f1palyaid),
+    getCountFenykepek(data.f1palyaid),
+  ]);
+
   let fogcheck = 0;
   if (foglalasok[0].length === 0) {
     fogcheck = 1;
@@ -111,7 +121,6 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
 
   if (!fileHandler) {
     console.log('Nincs feltoltve kep!');
-    const result = await getPalya(data.f1palyaid);
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
@@ -124,7 +133,6 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   const filePath = path.join(uploadDir, fileHandler.filename);
   if (!fileHandler.mimetype.startsWith('image/')) {
     console.log('A feltoltott allomany nem kep formatum!');
-    const result = await getPalya(data.f1palyaid);
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
@@ -138,7 +146,6 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Helytelen bemenet a kepfeltoltnel!');
-    const result = await getPalya(data.f1palyaid);
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
@@ -150,7 +157,6 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     return;
   }
 
-  const kepek = await getCountFenykepek(data.f1palyaid);
   console.log('a kepek szama az adott palyanak:');
   console.log(kepek[0][0].kepek_szama);
   const sorszam = kepek[0][0].kepek_szama + 1;
@@ -165,9 +171,9 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   });
 
   await addFenykep(data.f1palyaid, newFileName);
-  const result = await getPalya(data.f1palyaid);
+  const result2 = await getPalya(data.f1palyaid);
   res.render('reszletek', {
-    result: result[0],
+    result: result2[0],
     felhasznalok: felhasznalok[0],
     err: 0,
     fog: fogcheck,

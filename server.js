@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import requestMain from './routes/main.js';
+import requestMain from './routes/index.js';
 import requestReszletek from './routes/reszletek.js';
 import requestBevezet from './routes/bevezet.js';
 
