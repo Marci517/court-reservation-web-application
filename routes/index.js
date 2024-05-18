@@ -21,6 +21,7 @@ router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req,
     console.log('Helytelen bemenet a palyabevezetnel!');
     res.render('bevezet', {
       err: 1,
+      errmess: error.details[0].message,
     });
     return;
   }
@@ -47,7 +48,8 @@ router.get('/', async (req, res) => {
     console.log('Helytelen bemenet a kliensszurnel!');
     res.render('index', {
       resul: results[0],
-      err: 3,
+      err: 1,
+      errmess: error.details[0].message,
     });
     return;
   }
@@ -58,7 +60,8 @@ router.get('/', async (req, res) => {
     console.log('Helytelen kliensszurnel, min > max miatt!');
     res.render('index', {
       resul: results[0],
-      err: 2,
+      err: 1,
+      errmess: 'Helytelen kliensszurnel, min > max miatt!',
     });
     return;
   }
@@ -76,12 +79,14 @@ router.get('/', async (req, res) => {
     res.render('index', {
       resul: results[0],
       err: 1,
+      errmess: 'Nincs keresett palya',
     });
     return;
   }
   res.render('index', {
     resul: results[0],
     err: 0,
+    errmess: '',
   });
 });
 

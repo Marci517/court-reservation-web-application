@@ -60,7 +60,8 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
-      err: 5,
+      err: 2,
+      errmess: 'Helytelen bemenet a foglalasnal!',
       fog: fogcheck,
       foglalasok: foglalasok[0],
     });
@@ -72,7 +73,8 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
-      err: 4,
+      err: 2,
+      errmess: 'Mar van foglalas ebben az intervallumban',
       fog: fogcheck,
       foglalasok: foglalasok[0],
     });
@@ -94,6 +96,7 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     result: result[0],
     felhasznalok: felhasznalok[0],
     err: 10,
+    errmess: '',
     fog: fogcheck,
     foglalasok: foglalasokuj[0],
   });
@@ -115,16 +118,13 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     fogcheck = 1;
   }
 
-  const expected = Joi.object({
-    f1palyaid: Joi.string().required(),
-  });
-
   if (!fileHandler) {
     console.log('Nincs feltoltve kep!');
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
       err: 1,
+      errmess: 'Nincs feltoltve kep!',
       fog: fogcheck,
       foglalasok: foglalasok[0],
     });
@@ -136,20 +136,27 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
-      err: 2,
+      err: 1,
+      errmess: 'A feltoltott allomany nem kep formatum!',
       fog: fogcheck,
       foglalasok: foglalasok[0],
     });
     deleteFile(filePath);
     return;
   }
+
+  const expected = Joi.object({
+    f1palyaid: Joi.string().required(),
+  });
   const { error } = expected.validate(data);
+
   if (error != null) {
     console.log('Helytelen bemenet a kepfeltoltnel!');
     res.render('reszletek', {
       result: result[0],
       felhasznalok: felhasznalok[0],
-      err: 3,
+      err: 1,
+      errmess: error.details[0].message,
       fog: fogcheck,
       foglalasok: foglalasok[0],
     });
@@ -176,6 +183,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     result: result2[0],
     felhasznalok: felhasznalok[0],
     err: 0,
+    errmess: '',
     fog: fogcheck,
     foglalasok: foglalasok[0],
   });
