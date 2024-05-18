@@ -21,8 +21,8 @@
     <% const pid=result[0].PID; %>
 
         <% result.forEach(resul=> { %>
-            <% if (resul.FNev==="Nincs kep hozzaadva" ) { %>
-                <span>Kepek: <%= resul.FNev %> </span>
+            <% if (resul.FNev=== null) { %>
+                <span>Kepek: Nincs kep hozzaadva</span>
                 <% } else { %>
                     <img src="<%=resul.FNev%>" alt="Nem elerheto">
                     <% } %>
