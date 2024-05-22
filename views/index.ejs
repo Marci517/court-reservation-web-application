@@ -31,17 +31,19 @@
 
         </form>
         <% if (err===0) { %>
-            <ul>
+            <ul id="palyak_lista">
                 <% resul.forEach(result=> { %>
                     <li>
                         <span>Palyatipus: <%= result.Nev %>, </span>
                         <span>Oraber: <%= result.Oraber %>, </span>
                         <span>Cim: <%= result.Cim %>, </span>
-                        <span>Leiras: <%= result.Leiras %>, </span>
+                        <span class="hidden">Leiras: <%= result.Leiras %>, </span>
+                        <span class="hidden">Nyitvatartas: <%= result.NyitKezd %>-<%= result.NyitVeg %></span>
                         <a href="/reszletek?id=<%= result.PID %>">Részletek</a>
                     </li>
                     <% }); %>
             </ul>
+            <script src="extendInfo.js"></script>
             <% } %>
 
                 <% if (err===1) { %>

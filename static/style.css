@@ -6,3 +6,11 @@ footer {
 img {
     width: 100px;
 }
+
+.hidden{
+    display: none;
+}
+
+.visible{
+    display: block;
+}

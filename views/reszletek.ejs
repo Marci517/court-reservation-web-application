@@ -3,26 +3,29 @@
 
 <%- include('partials/head.ejs') %>
 
-<body>
-    <header>
-        <h1>
-            Reszletek
-        </h1>
-    </header>
+    <body>
+        <header>
+            <h1>
+                Reszletek
+            </h1>
+        </header>
 
-    <span>Palyatipus: <%= result[0].Nev %>, </span>
-    <span>Oraber: <%= result[0].Oraber %>, </span>
-    <span>Cim: <%= result[0].Cim %>, </span>
-    <span>Leiras: <%= result[0].Leiras %></span>
-    <% const pid=result[0].PID; %>
+        <span>Palyatipus: <%= result[0].Nev %>, </span>
+        <span>Oraber: <%= result[0].Oraber %>, </span>
+        <span>Cim: <%= result[0].Cim %>, </span>
+        <span>Leiras: <%= result[0].Leiras %></span>
+        <span>Nyitvatartas: <%= result[0].NyitKezd %>-<%= result[0].NyitVeg %></span>
+        <% const pid=result[0].PID; %>
 
-        <% result.forEach(resul=> { %>
-            <% if (resul.FNev===null) { %>
-                <span>Kepek: Nincs kep hozzaadva</span>
-                <% } else { %>
-                    <img src="<%=resul.FNev%>" alt="Nem elerheto">
+            <% result.forEach(resul=> { %>
+                <% if (resul.FNev!==null) { %>
+                    <div>
+                        <img src="<%= resul.FNev %>" alt="Nem elerheto">
+                        <button class="torlesgombok" data-FNev="<%= resul.FNev %>">Torles</button>
+                    </div>
                     <% } %>
                         <% }); %>
+                            <script src="deleteImg.js"></script>
 
                             <% if (err===1) { %>
                                 <p>
@@ -82,9 +85,9 @@
                                                                             </form>
 
                                                                             Bencze Marton,
-                                                                            bmim2214, 521, lab4
+                                                                            bmim2214, 521, lab5
                                                                         </footer>
 
-</body>
+    </body>
 
 </html>

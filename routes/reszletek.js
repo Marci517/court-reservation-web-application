@@ -2,16 +2,10 @@ import express from 'express';
 import Joi from 'joi';
 import path from 'path';
 import fs from 'fs';
-import {
-  getPalya,
-  getFelhasznalokNevei,
-  getFoglalasok,
-  getOverlaps,
-  getId,
-  addFoglalas,
-  getCountFenykepek,
-  addFenykep,
-} from '../db/db.js';
+import { getPalya } from '../db/dbPalyak.js';
+import { getFelhasznalokNevei, getId } from '../db/dbFelhasznalok.js';
+import { addFenykep, getCountFenykepek } from '../db/dbKepek.js';
+import { getFoglalasok, getOverlaps, addFoglalas, getOverlaps2 } from '../db/dbFoglalasok.js';
 import { deleteFile } from '../utils/utils.js';
 import { uploadDir, multerUpload } from '../uploadConfigs/uploadConfigs.js';
 
@@ -67,8 +61,12 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     });
     return;
   }
-  const ellenorzo = await getOverlaps(data.f4palyaid, data.f4kezd, data.f4vegez);
-  if (ellenorzo[0].length !== 0) {
+  const [ellenorzo1, ellenorzo2] = await Promise.all([
+    getOverlaps(data.f4palyaid, data.f4kezd, data.f4vegez),
+    getOverlaps2(data.f4palyaid, data.f4kezd, data.f4vegez),
+  ]);
+
+  if (ellenorzo1[0].length !== 0) {
     console.log('Mar van foglalas ebben az intervallumban');
     res.render('reszletek', {
       result: result[0],
@@ -80,6 +78,20 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     });
     return;
   }
+
+  if (ellenorzo2[0].length === 0) {
+    console.log('Nincs nyitva ebben az intervallumban!');
+    res.render('reszletek', {
+      result: result[0],
+      felhasznalok: felhasznalok[0],
+      err: 2,
+      errmess: 'Nincs nyitva ebben az intervallumban!',
+      fog: fogcheck,
+      foglalasok: foglalasok[0],
+    });
+    return;
+  }
+
   const felid = await getId(data.felhasznalok);
   const today = new Date();
   console.log(felid);
