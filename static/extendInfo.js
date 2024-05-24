@@ -1,18 +1,23 @@
 const extended = [];
 
-function getMessage(item, index) {
-  console.log(index);
-  fetch('/api/extends/palyak_lista')
+function getMessage(item, PID, index) {
+  fetch(`/api/extends/${PID}`)
     .then((response) => response.json())
     .then((message) => {
-      console.log(message);
       const nyitvatartas = item.children[item.children.length - 2];
       const leiras = item.children[item.children.length - 3];
       const reszletek = item.children[item.children.length - 1];
+      const ujnyitvatartaskezd = message.NyitKezd;
+      const ujnyitvatartasveg = message.NyitVeg;
+      const ujnyitvatartasleiras = message.Leiras;
+
+      console.log(ujnyitvatartaskezd);
       const spanLeiras = document.createElement('span');
-      spanLeiras.textContent = leiras.textContent;
+      spanLeiras.textContent = ujnyitvatartasleiras;
+
       const spanNyit = document.createElement('span');
-      spanNyit.textContent = nyitvatartas.textContent;
+      spanNyit.textContent = `${ujnyitvatartaskezd}-${ujnyitvatartasveg}`;
+
       if (extended[index] === 0) {
         spanLeiras.classList.add('visible');
         spanNyit.classList.add('visible');
@@ -24,9 +29,11 @@ function getMessage(item, index) {
       item.removeChild(reszletek);
       item.removeChild(leiras);
       item.removeChild(nyitvatartas);
+
       item.appendChild(spanLeiras);
       item.appendChild(spanNyit);
       item.appendChild(reszletek);
+
       extended[index] = extended[index] * -1 + 1;
     })
     .catch((error) => {
@@ -35,14 +42,16 @@ function getMessage(item, index) {
 }
 
 window.onload = () => {
-  const text = document.getElementById('palyak_lista');
-  const items = text.children;
+  const items = document.querySelectorAll('.informaciok');
+
   for (let i = 0; i < items.length; i++) {
     extended[i] = 0;
   }
+
   for (let i = 0; i < items.length; i++) {
     items[i].addEventListener('click', () => {
-      getMessage(items[i], i);
+      const pidd = items[i].dataset.pid;
+      getMessage(items[i], pidd, i);
     });
   }
 };

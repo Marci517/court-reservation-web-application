@@ -33,7 +33,7 @@
         <% if (err===0) { %>
             <ul id="palyak_lista">
                 <% resul.forEach(result=> { %>
-                    <li>
+                    <li class="informaciok" data-PID="<%= result.PID %>">
                         <span>Palyatipus: <%= result.Nev %>, </span>
                         <span>Oraber: <%= result.Oraber %>, </span>
                         <span>Cim: <%= result.Cim %>, </span>
