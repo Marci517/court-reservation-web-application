@@ -39,29 +39,35 @@ router.get('/', async (req, res) => {
     });
     return;
   }
+  try {
+    if (data.palyakkliens === 'osszes') {
+      results = await getPalyak2(data.f3orabermin, data.f3orabermax);
+    } else {
+      results = await getPalyak(data.palyakkliens, data.f3orabermin, data.f3orabermax);
+    }
+    console.log('szurunk palyat az infok alapjan');
+    console.log(data);
 
-  if (data.palyakkliens === 'osszes') {
-    results = await getPalyak2(data.f3orabermin, data.f3orabermax);
-  } else {
-    results = await getPalyak(data.palyakkliens, data.f3orabermin, data.f3orabermax);
-  }
-  console.log('szurunk palyat az infok alapjan');
-  console.log(data);
-
-  if (results[0].length === 0) {
-    console.log('Nincs keresett palya');
+    if (results[0].length === 0) {
+      console.log('Nincs keresett palya');
+      res.render('index', {
+        resul: results[0],
+        err: 1,
+        errmess: 'Nincs keresett palya',
+      });
+      return;
+    }
     res.render('index', {
       resul: results[0],
-      err: 1,
-      errmess: 'Nincs keresett palya',
+      err: 0,
+      errmess: '',
     });
-    return;
+  } catch (err) {
+    console.log(err);
+    res.render('error', {
+      error: 'Hiba a fooldal betoltesekor, probald ujra!',
+    });
   }
-  res.render('index', {
-    resul: results[0],
-    err: 0,
-    errmess: '',
-  });
 });
 
 export default router;

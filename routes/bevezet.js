@@ -34,8 +34,14 @@ router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req,
     });
     return;
   }
-
-  await addPalya(data.palyak, data.f0oraber, data.f0cim, data.f0leiras, data.f0kezd, data.f0vegez);
+  try {
+    await addPalya(data.palyak, data.f0oraber, data.f0cim, data.f0leiras, data.f0kezd, data.f0vegez);
+  } catch (err) {
+    console.log(err);
+    res.render('error', {
+      error: 'Hiba tortent a palya hozzaadasakor, kerlek probald ujra!',
+    });
+  }
   res.redirect('/');
   console.log('Sikeres feltoltes');
 });

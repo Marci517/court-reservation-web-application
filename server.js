@@ -3,7 +3,7 @@ import path from 'path';
 import requestMain from './routes/index.js';
 import requestReszletek from './routes/reszletek.js';
 import requestBevezet from './routes/bevezet.js';
-import apiRoutes from './api/apiIndex.js';
+import apiRoutes from './api/index.js';
 
 const app = express();
 

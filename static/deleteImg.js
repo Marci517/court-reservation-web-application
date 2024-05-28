@@ -11,13 +11,16 @@ function deleteImage(button, nev) {
         alert('Sikeres torles');
       } else if (response.status === 404) {
         console.log(`Kep ID: ${nev} nincs meg.`);
+        alert('Sikertelen torles');
       } else {
         console.log('Hiba a kep torlesenel.');
+        alert('Sikertelen torles');
       }
     })
     .catch((err) => {
       console.error('Error:', err);
       console.log('Hiba a kep torlesenel.');
+      alert('Sikertelen torles');
     });
 }
 
