@@ -10,83 +10,89 @@
             </h1>
         </header>
 
-        <span>Palyatipus: <%= result[0].Nev %>, </span>
-        <span>Oraber: <%= result[0].Oraber %>, </span>
-        <span>Cim: <%= result[0].Cim %>, </span>
-        <span>Leiras: <%= result[0].Leiras %></span>
-        <span>Nyitvatartas: <%= result[0].NyitKezd %>-<%= result[0].NyitVeg %></span>
-        <% const pid=result[0].PID; %>
+        <span>Bejelentkezve mint: <%= bej %>, </span>
+        <%- include('partials/logButtons') %>
+            <span>Palyatipus: <%= result[0].Nev %>, </span>
+            <span>Oraber: <%= result[0].Oraber %>, </span>
+            <span>Cim: <%= result[0].Cim %>, </span>
+            <span>Leiras: <%= result[0].Leiras %></span>
+            <span>Nyitvatartas: <%= result[0].NyitKezd %>-<%= result[0].NyitVeg %></span>
+            <% const pid=result[0].PID; %>
 
-            <% result.forEach(resul=> { %>
-                <% if (resul.FNev!==null) { %>
-                    <div>
-                        <img src="<%= resul.FNev %>" alt="Nem elerheto">
-                        <button class="torlesgombok" data-FNev="<%= resul.FNev %>">Torles</button>
-                    </div>
-                    <% } %>
-                        <% }); %>
-                            <script src="deleteImg.js"></script>
+                <% result.forEach(resul=> { %>
+                    <% if (resul.FNev!==null) { %>
+                        <div>
+                            <img src="<%= resul.FNev %>" alt="Nem elerheto">
+                            <button class="torlesgombok" data-FNev="<%= resul.FNev %>">Torles</button>
+                        </div>
+                        <% } %>
+                            <% }); %>
+                                <script src="deleteImg.js"></script>
 
-                            <% if (err===1) { %>
-                                <p>
-                                    <%= errmess %>
-                                </p>
-                                <% } %>
+                                <% if (err===1) { %>
+                                    <p>
+                                        <%= errmess %>
+                                    </p>
+                                    <% } %>
 
-                                    <form action="/foglalas" method="POST">
-                                        <label for="felhasznalok">Valassz egy felhasznalot: </label>
-                                        <select name="felhasznalok" id="felhasznalok" required>
-                                            <% felhasznalok.forEach(fel=> { %>
-                                                <option value="<%= fel.FelNev %>">
-                                                    <%= fel.FelNev %>
-                                                </option>
-                                                <% }); %>
-                                        </select>
-                                        <label for="f4kezd">Add meg a kezdesi idot: </label>
-                                        <input type="time" name="f4kezd" id="f4kezd" required>
-                                        <label for="f4vegez">Add meg a vegzesi idot: </label>
-                                        <input type="time" name="f4vegez" id="f4vegez" required>
-                                        <input type="hidden" name="f4palyaid" id="f4palyaid" value="<%= pid %>">
-                                        <button type="submit">Submit</button>
-                                    </form>
-                                    <% if (err===2) { %>
-                                        <p>
-                                            <%= errmess %>
-                                        </p>
-                                        <% } %>
+                                        <form action="/foglalas" method="POST">
+                                            <label for="f4kezd">Add meg a kezdesi idot: </label>
+                                            <input type="time" name="f4kezd" id="f4kezd" required>
+                                            <label for="f4vegez">Add meg a vegzesi idot: </label>
+                                            <input type="time" name="f4vegez" id="f4vegez" required>
+                                            <input type="hidden" name="f4palyaid" id="f4palyaid" value="<%= pid %>">
+                                            <button type="submit">Submit</button>
+                                        </form>
+                                        <% if (err===2) { %>
+                                            <p>
+                                                <%= errmess %>
+                                            </p>
+                                            <% } %>
 
-                                            <% if (err===10) { %>
-                                                <p>Sikeres foglalas!</p>
-                                                <% } %>
-                                                    <% if (fog !==1) { %>
-                                                        <% foglalasok.forEach(foglalas=> { %>
-                                                            <span>Datum: <%= foglalas.Datum %>,
-                                                            </span>
-                                                            <span>Kezdes Idopont: <%= foglalas.Kezdes %>, </span>
-                                                            <span>Vege: <%= foglalas.Vegzes %>,
-                                                            </span>
-                                                            <% }); %>
-                                                                <% } else { %>
-                                                                    <span>Nincs foglalás</span>
+                                                <% if (err===10) { %>
+                                                    <p>Sikeres foglalas!</p>
+                                                    <% } %>
+                                                        <% if (fog !==1) { %>
+                                                            <% foglalasok.forEach(foglalas=> { %>
+                                                                <span>Datum: <%= foglalas.Datum %>,
+                                                                </span>
+                                                                <span>Kezdes Idopont: <%= foglalas.Kezdes %>, </span>
+                                                                <span>Vege: <%= foglalas.Vegzes %>,
+                                                                </span>
+                                                                <% if (foglalas.FID===userid) { %>
+                                                                    <form action="/torlesfog" method="POST">
+                                                                        <input type="hidden" name="FogID" id="FogID"
+                                                                            value="<%= foglalas.FogID %>">
+                                                                        <button type="submit">Foglalas Torlese</button>
+                                                                    </form>
                                                                     <% } %>
+                                                                        <% }); %>
+                                                                            <% } else { %>
+                                                                                <span>Nincs foglalás</span>
+                                                                                <% } %>
 
-                                                                        <footer>
-                                                                            <form action="/kepfeltolt" method="POST"
-                                                                                enctype="multipart/form-data">
-                                                                                <input type="hidden" name="f1palyaid"
-                                                                                    id="f1palyaid" value="<%= pid %>">
-                                                                                <label for="f1kep">Tolts
-                                                                                    fel egy
-                                                                                    kepet:
-                                                                                </label>
-                                                                                <input type="file" name="f1kep"
-                                                                                    id="f1kep" required>
-                                                                                <button type="submit">Submit</button>
-                                                                            </form>
+                                                                                    <footer>
+                                                                                        <form action="/kepfeltolt"
+                                                                                            method="POST"
+                                                                                            enctype="multipart/form-data">
+                                                                                            <input type="hidden"
+                                                                                                name="f1palyaid"
+                                                                                                id="f1palyaid"
+                                                                                                value="<%= pid %>">
+                                                                                            <label for="f1kep">Tolts
+                                                                                                fel egy
+                                                                                                kepet:
+                                                                                            </label>
+                                                                                            <input type="file"
+                                                                                                name="f1kep" id="f1kep"
+                                                                                                required>
+                                                                                            <button
+                                                                                                type="submit">Submit</button>
+                                                                                        </form>
 
-                                                                            Bencze Marton,
-                                                                            bmim2214, 521, lab5
-                                                                        </footer>
+                                                                                        Bencze Marton,
+                                                                                        bmim2214, 521, lab6
+                                                                                    </footer>
 
     </body>
 

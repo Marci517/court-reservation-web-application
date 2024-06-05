@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs') %>
+
+    <body>
+        <header>
+            <h1>
+                Bejelentkezes
+            </h1>
+        </header>
+        <form action="/bejelentkezesform" method="POST">
+            <label for="f6email">Add meg az email cimet: </label>
+            <input type="email" name="f6email" id="f6email" required>
+            <label for="f6kod">Add meg a kodot: </label>
+            <input type="password" name="f6kod" id="f6kod" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <% if (err===1) { %>
+            <p>
+                <%= errmess %>
+            </p>
+            <% } %>
+                <%- include('partials/footer.ejs') %>
+
+    </body>
+
+</html>

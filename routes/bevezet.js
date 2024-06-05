@@ -6,14 +6,27 @@ const router = express.Router();
 
 router.get('/bevezet', (req, res) => {
   console.log('bent a bevezetben');
+  let bejelentkezesTipus = '';
+  if (req.session.username) {
+    bejelentkezesTipus = req.session.username;
+  } else {
+    bejelentkezesTipus = 'Vendeg';
+  }
   res.render('bevezet', {
+    bej: bejelentkezesTipus,
     err: 0,
-    errmess: 'Helytelen bemenet',
+    errmess: '',
   });
 });
 
 router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('bent a palyabevezetben');
+  let bejelentkezesTipus = '';
+  if (req.session.username) {
+    bejelentkezesTipus = req.session.username;
+  } else {
+    bejelentkezesTipus = 'Vendeg';
+  }
   const data = req.body;
   const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
   const expected = Joi.object({
@@ -29,6 +42,7 @@ router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req,
   if (error != null) {
     console.log('Helytelen bemenet a palyabevezetnel!');
     res.render('bevezet', {
+      bej: bejelentkezesTipus,
       err: 1,
       errmess: error.details[0].message,
     });

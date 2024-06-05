@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs') %>
+
+    <body>
+        <header>
+            <h1>
+                Regisztralas
+            </h1>
+        </header>
+        <form action="/regisztralasform" method="POST">
+            <label for="f5nev">Add meg a felhasznalonevet: </label>
+            <input type="text" name="f5nev" id="f5nev" required>
+            <label for="f5email">Add meg az email cimet: </label>
+            <input type="email" name="f5email" id="f5email" required>
+            <label for="f5kod">Add meg a kodot: </label>
+            <input type="password" name="f5kod" id="f5kod" required>
+            <label for="f5kodu">Add meg a kodot ujra: </label>
+            <input type="password" name="f5kodu" id="f5kodu" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <% if (err===1) { %>
+            <p>
+                <%= errmess %>
+            </p>
+            <% } %>
+                <%- include('partials/footer.ejs') %>
+
+    </body>
+
+</html>

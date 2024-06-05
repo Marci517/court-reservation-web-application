@@ -26,10 +26,15 @@ export function getOverlaps2(pid, kezd, veg) {
 }
 
 export function getFoglalasok(pid) {
-  const sql = `SELECT f.Datum, f.Kezdes, f.Vegzes 
+  const sql = `SELECT f.Datum, f.Kezdes, f.Vegzes, f.FID, f.FogID
     FROM Palyak AS p JOIN Foglalasok AS f ON p.PID = f.PID
     WHERE p.PID = ?`;
   const values = [pid];
 
   return pool.query(sql, values);
 }
+
+export const deleteFoglalas = async (FogID) => {
+  const [result] = await pool.query('DELETE FROM Foglalasok WHERE FogID = ?', [FogID]);
+  return result.affectedRows > 0;
+};

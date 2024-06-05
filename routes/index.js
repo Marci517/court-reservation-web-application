@@ -10,6 +10,12 @@ router.get('/', async (req, res) => {
   let data = req.query;
   let results = {};
   data = getminmaxnev(data);
+  let bejelentkezesTipus = '';
+  if (req.session.username) {
+    bejelentkezesTipus = req.session.username;
+  } else {
+    bejelentkezesTipus = 'Vendeg';
+  }
 
   const expected = Joi.object({
     f3orabermin: Joi.number().min(0).required(),
@@ -21,6 +27,7 @@ router.get('/', async (req, res) => {
   if (error != null) {
     console.log('Helytelen bemenet a kliensszurnel!');
     res.render('index', {
+      bej: bejelentkezesTipus,
       resul: results[0],
       err: 1,
       errmess: error.details[0].message,
@@ -33,6 +40,7 @@ router.get('/', async (req, res) => {
   if (min > max) {
     console.log('Helytelen kliensszurnel, min > max miatt!');
     res.render('index', {
+      bej: bejelentkezesTipus,
       resul: results[0],
       err: 1,
       errmess: 'Helytelen kliensszurnel, min > max miatt!',
@@ -51,6 +59,7 @@ router.get('/', async (req, res) => {
     if (results[0].length === 0) {
       console.log('Nincs keresett palya');
       res.render('index', {
+        bej: bejelentkezesTipus,
         resul: results[0],
         err: 1,
         errmess: 'Nincs keresett palya',
@@ -58,6 +67,7 @@ router.get('/', async (req, res) => {
       return;
     }
     res.render('index', {
+      bej: bejelentkezesTipus,
       resul: results[0],
       err: 0,
       errmess: '',

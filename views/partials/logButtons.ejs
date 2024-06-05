@@ -1,0 +1,12 @@
+<% if (bej !=='Vendeg' ) { %>
+  <form action="/kijelentkezes" method="GET">
+    <button type="submit">Kijelentkezes</button>
+  </form>
+  <% } else { %>
+    <form action="/regisztralas" method="GET">
+      <button type="submit">Regisztralas</button>
+    </form>
+    <form action="/bejelentkezes" method="GET">
+      <button type="submit">Bejelentkezes</button>
+    </form>
+    <% } %>
