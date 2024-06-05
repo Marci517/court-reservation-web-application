@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import morgan from 'morgan';
 import session from 'express-session';
 import requestMain from './routes/index.js';
 import requestReszletek from './routes/reszletek.js';
@@ -15,6 +16,7 @@ app.use(express.static(path.join(process.cwd(), 'static')));
 app.use(express.static(path.join(process.cwd(), 'uploadDir')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
+app.use(morgan('tiny'));
 app.use('/api', apiRoutes);
 app.use(
   session({
