@@ -10,7 +10,7 @@
             </h1>
         </header>
         <span>Bejelentkezve mint: <%= bej %>, </span>
-        <%- include('partials/logButtons') %>
+        <%- include('partials/logButtons.ejs') %>
             <form action="/palyabevezet" method="POST">
                 <label for="palyak">Valassz egy palyat: </label>
                 <select name="palyak" id="palyak" required>
