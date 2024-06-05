@@ -57,7 +57,7 @@ router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req,
     });
   }
   res.redirect('/');
-  console.log('Sikeres feltoltes!');
+  console.log('Sikeres feltoltes');
 });
 
 export default router;
