@@ -1,32 +1,12 @@
 import express from 'express';
 import Joi from 'joi';
-import { addPalya } from '../db/dbPalyak.js';
+import { addPalya } from '../../db/dbPalyak.js';
 
 const router = express.Router();
 
-router.get('/bevezet', (req, res) => {
-  console.log('bent a bevezetben');
-  let bejelentkezesTipus = '';
-  if (req.session.username) {
-    bejelentkezesTipus = req.session.username;
-  } else {
-    bejelentkezesTipus = 'Vendeg';
-  }
-  res.render('bevezet', {
-    bej: bejelentkezesTipus,
-    err: 0,
-    errmess: '',
-  });
-});
-
 router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('bent a palyabevezetben');
-  let bejelentkezesTipus = '';
-  if (req.session.username) {
-    bejelentkezesTipus = req.session.username;
-  } else {
-    bejelentkezesTipus = 'Vendeg';
-  }
+  const bejelentkezesTipus = req.session.username;
   const data = req.body;
   const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
   const expected = Joi.object({
@@ -55,6 +35,7 @@ router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req,
     res.render('error', {
       error: 'Hiba tortent a palya hozzaadasakor, kerlek probald ujra!',
     });
+    return;
   }
   res.redirect('/');
   console.log('Sikeres feltoltes!');

@@ -8,9 +8,9 @@ router.all('/kijelentkezes', (req, res) => {
       res.render('error', {
         error: 'Hiba tortent a kijelentkezes kozben, probald ujra!',
       });
-    } else {
-      res.redirect('/');
+      return;
     }
+    res.redirect('/');
   });
 });
 

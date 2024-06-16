@@ -1,12 +1,19 @@
 import express from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
-import { addFelhasznalok, getId, getIdByEmail } from '../db/dbFelhasznalok.js';
+import { addFelhasznalok, getId, getIdByEmail } from '../../db/dbFelhasznalok.js';
 
 const router = express.Router();
 
 router.get('/regisztralas', (req, res) => {
   console.log('bent a regisztralasban');
+  if (req.session.username) {
+    res.render('error', {
+      error: 'Az oldal nem elerheto!',
+    });
+    return;
+  }
+
   res.render('regisztralas', {
     err: 0,
     errmess: '',
@@ -69,6 +76,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
     res.render('error', {
       error: 'Hiba tortent a felhasznalo hozzaadasakor, kerlek probald ujra!',
     });
+    return;
   }
   res.redirect('/bejelentkezes');
   console.log('Sikeres regisztralas');

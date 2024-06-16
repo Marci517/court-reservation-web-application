@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs') %>
+
+    <body>
+        <header>
+            <h1>
+                Adataim
+            </h1>
+        </header>
+        <%- include('partials/logButtons.ejs') %>
+            <span>Felhasznalonev: <%= bej %></span>
+            <form action="/nevcsere" method="GET">
+                <button type="submit">Nev modositasa</button>
+            </form>
+
+            <span>Email: <%= email %></span>
+            <form action="/emailcsere" method="GET">
+                <button type="submit">Email modositasa</button>
+            </form>
+
+            <span>Jelszo: ******</span>
+            <form action="/jelszocsere" method="GET">
+                <button type="submit">Jelszo modositasa</button>
+            </form>
+
+            <form action="/" method="GET">
+                <button type="submit">Vissza a fooldalra</button>
+            </form>
+            <%- include('partials/footer.ejs') %>
+
+    </body>
+
+</html>

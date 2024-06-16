@@ -49,3 +49,21 @@ export function addFelhasznalok(nev, email, kod) {
 
   return pool.query(sql, values);
 }
+
+export function updateEmail(id, email) {
+  const sql = `UPDATE Felhasznalok
+               SET Email = ?
+               WHERE FID = ?`;
+  const values = [email, id];
+
+  return pool.query(sql, values);
+}
+
+export function updateNev(id, nev) {
+  const sql = `UPDATE Felhasznalok
+               SET FelNev = ?
+               WHERE FID = ?`;
+  const values = [nev, id];
+
+  return pool.query(sql, values);
+}

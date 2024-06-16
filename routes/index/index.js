@@ -1,7 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
-import { getPalyak, getPalyak2 } from '../db/dbPalyak.js';
-import { getminmaxnev } from '../utils/utils.js';
+import { getPalyak, getPalyak2 } from '../../db/dbPalyak.js';
+import { getminmaxnev } from '../../utils/utils.js';
 
 const router = express.Router();
 

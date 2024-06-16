@@ -1,12 +1,18 @@
 import express from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
-import { getIdByEmail, getPassword, getName } from '../db/dbFelhasznalok.js';
+import { getIdByEmail, getPassword, getName } from '../../db/dbFelhasznalok.js';
 
 const router = express.Router();
 
 router.get('/bejelentkezes', (req, res) => {
   console.log('bent a bejelentkezesben');
+  if (req.session.username) {
+    res.render('error', {
+      error: 'Az oldal nem elerheto!',
+    });
+    return;
+  }
   res.render('bejelentkezes', {
     err: 0,
     errmess: '',
@@ -14,6 +20,12 @@ router.get('/bejelentkezes', (req, res) => {
 });
 
 router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async (req, res) => {
+  if (req.session.username) {
+    res.render('error', {
+      error: 'Az oldal nem elerheto!',
+    });
+    return;
+  }
   const data = req.body;
   const expected = Joi.object({
     f6email: Joi.string().email().required(),
@@ -32,7 +44,6 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
 
   try {
     const id = await getIdByEmail(data.f6email);
-    console.log(id[0][0].FID);
     if (id[0].length === 0) {
       console.log('Nem letezik ilyen email!');
       res.render('bejelentkezes', {
@@ -51,14 +62,17 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
       });
       return;
     }
+
     req.session.userid = id[0][0].FID;
     const nev = await getName(id[0][0].FID);
     req.session.username = nev[0][0].FelNev;
+    req.session.email = data.f6email;
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba tortent a felhasznalo hozzaadasakor, kerlek probald ujra!',
+      error: 'Hiba tortent a bejelentkezeskor, kerlek probald ujra!',
     });
+    return;
   }
   res.redirect('/');
   console.log('Sikeres regisztralas');
