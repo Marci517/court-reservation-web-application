@@ -15,6 +15,8 @@ import requestKijelentkezes from './routes/auth/kijelentkezes.js';
 import requestAdatok from './routes/szemelyesAdatok/szemelyesAdatok.js';
 import requestEmailCsere from './routes/szemelyesAdatok/emailCsere.js';
 import requestNevCsere from './routes/szemelyesAdatok/nevCsere.js';
+import requestJelszoCsere from './routes/szemelyesAdatok/jelszoCsere.js';
+import requestProfilTorles from './routes/szemelyesAdatok/profilTorles.js';
 import apiRoutes from './api/index.js';
 
 const app = express();
@@ -45,6 +47,8 @@ app.use('', requestKijelentkezes);
 app.use('', requestAdatok);
 app.use('', requestEmailCsere);
 app.use('', requestNevCsere);
+app.use('', requestJelszoCsere);
+app.use('', requestProfilTorles);
 
 app.listen(8000, () => {
   console.log('Listening on port 8000');

@@ -1,7 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
-import { updateEmail, getPassword } from '../../db/dbFelhasznalok.js';
+import { updateEmail, getPassword, getIdByEmail } from '../../db/dbFelhasznalok.js';
 
 const router = express.Router();
 
@@ -41,7 +41,16 @@ router.post('/emailcsereform', express.urlencoded({ extended: true }), async (re
     const em = req.session.email;
     const newEmail = data.f7email;
     const datkod = await getPassword(em);
-    const match = await bcrypt.compare(data.f7kod, datkod[0][0].Kod);
+    const [match, id2] = await Promise.all([bcrypt.compare(data.f7kod, datkod[0][0].Kod), getIdByEmail(newEmail)]);
+
+    if (id2[0].length !== 0) {
+      console.log('Az email mar hasznalatban!');
+      res.render('emailCsere', {
+        err: 1,
+        errmess: 'Hiba tortent a email cserenel, adj meg mas emailt!',
+      });
+      return;
+    }
     if (!match) {
       console.log('Helytelen jelszo!');
       res.render('emailCsere', {
@@ -56,6 +65,7 @@ router.post('/emailcsereform', express.urlencoded({ extended: true }), async (re
     res.render('error', {
       error: 'Hiba tortent a email csereleskor, kerlek probald ujra!',
     });
+    return;
   }
   res.redirect('/kijelentkezes');
   console.log('Sikeres email csere');

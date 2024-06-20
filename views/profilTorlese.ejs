@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs') %>
+
+    <body>
+        <header>
+            <h1>
+                Profil torlese
+            </h1>
+        </header>
+        <form action="/profiltorlesform" method="POST">
+            <label for="f10kod">Add meg a kodot: </label>
+            <input type="password" name="f10kod" id="f10kod" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <% if (err===1) { %>
+            <p>
+                <%= errmess %>
+            </p>
+            <% } %>
+                <form action="/" method="GET">
+                    <button type="submit">Vissza a fooldalra</button>
+                </form>
+                <%- include('partials/footer.ejs') %>
+
+    </body>
+
+</html>

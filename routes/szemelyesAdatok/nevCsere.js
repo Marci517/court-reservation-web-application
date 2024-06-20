@@ -1,7 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
-import { updateNev, getPassword } from '../../db/dbFelhasznalok.js';
+import { updateNev, getPassword, getIdByNev } from '../../db/dbFelhasznalok.js';
 
 const router = express.Router();
 
@@ -41,7 +41,16 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
     const em = req.session.email;
     const newNev = data.f8nev;
     const datkod = await getPassword(em);
-    const match = await bcrypt.compare(data.f8kod, datkod[0][0].Kod);
+    const [match, id2] = await Promise.all([bcrypt.compare(data.f8kod, datkod[0][0].Kod), getIdByNev(newNev)]);
+
+    if (id2[0].length !== 0) {
+      console.log('A nev mar hasznalatban!');
+      res.render('nevCsere', {
+        err: 1,
+        errmess: 'Hiba tortent a nev cserenel, adj meg mas nevet!',
+      });
+      return;
+    }
     if (!match) {
       console.log('Helytelen jelszo!');
       res.render('nevCsere', {
@@ -56,6 +65,7 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
     res.render('error', {
       error: 'Hiba tortent a nev csereleskor, kerlek probald ujra!',
     });
+    return;
   }
   res.redirect('/kijelentkezes');
   console.log('Sikeres nev csere');
