@@ -13,7 +13,7 @@ router.get('/profiltorlese', (req, res) => {
     });
     return;
   }
-  res.render('profilTorlese', {
+  res.render('adatok/profilTorlese', {
     err: 0,
     errmess: '',
     bej: req.session.username,
@@ -35,7 +35,7 @@ router.post('/profiltorlesform', express.urlencoded({ extended: true }), async (
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Hibas jelszo!');
-    res.render('profilTorlese', {
+    res.render('adatok/profilTorlese', {
       err: 1,
       errmess: 'Hibás jelszó',
       bej: req.session.username,
@@ -51,7 +51,7 @@ router.post('/profiltorlesform', express.urlencoded({ extended: true }), async (
 
     if (!match) {
       console.log('Helytelen jelszo!');
-      res.render('profilTorlese', {
+      res.render('adatok/profilTorlese', {
         err: 1,
         errmess: 'Nem helyes jelszó',
         bej: req.session.username,

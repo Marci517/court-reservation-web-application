@@ -36,7 +36,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
 
     if (!fileHandler) {
       console.log('Nincs feltoltve kep!');
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -50,7 +50,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     const filePath = path.join(uploadDir, fileHandler.filename);
     if (!fileHandler.mimetype.startsWith('image/')) {
       console.log('A feltoltott allomany nem kep formatum!');
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -68,7 +68,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     const { error } = expected.validate(data);
     if (error != null) {
       console.log('Helytelen bemenet a kepfeltoltnel!');
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -92,7 +92,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
     });
     await addFenykep(data.f1palyaid, newFileName);
     const result2 = await getPalya(data.f1palyaid);
-    res.render('reszletek', {
+    res.render('reszletek/reszletek', {
       userid: user,
       bej: bejelentkezesTipus,
       result: result2[0],

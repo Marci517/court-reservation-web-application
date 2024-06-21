@@ -13,7 +13,7 @@ router.get('/nevcsere', (req, res) => {
     });
     return;
   }
-  res.render('nevCsere', {
+  res.render('adatok/nevCsere', {
     err: 0,
     errmess: '',
     bej: req.session.username,
@@ -36,7 +36,7 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Hibás név vagy jelszó!');
-    res.render('nevCsere', {
+    res.render('adatok/nevCsere', {
       err: 1,
       errmess: 'Hibás név vagy jelszó!',
       bej: req.session.username,
@@ -53,7 +53,7 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
 
     if (id2[0].length !== 0) {
       console.log('A nev mar hasznalatban!');
-      res.render('nevCsere', {
+      res.render('adatok/nevCsere', {
         err: 1,
         errmess: 'Hiba történt a név cserénél, adj meg más nevet!',
         bej: req.session.username,
@@ -62,7 +62,7 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
     }
     if (!match) {
       console.log('Helytelen jelszo!');
-      res.render('nevCsere', {
+      res.render('adatok/nevCsere', {
         err: 1,
         errmess: 'Nem helyes új név vagy jelszó',
         bej: req.session.username,

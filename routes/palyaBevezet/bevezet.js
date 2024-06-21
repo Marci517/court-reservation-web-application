@@ -13,7 +13,7 @@ router.get('/bevezet', (req, res) => {
     });
     return;
   }
-  res.render('bevezet', {
+  res.render('admin/bevezet', {
     bej: bejelentkezesTipus,
     err: 0,
     errmess: '',

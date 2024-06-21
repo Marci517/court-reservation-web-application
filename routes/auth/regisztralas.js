@@ -14,7 +14,7 @@ router.get('/regisztralas', (req, res) => {
     return;
   }
 
-  res.render('regisztralas', {
+  res.render('auth/regisztralas', {
     err: 0,
     errmess: '',
   });
@@ -32,7 +32,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Helytelen bemenet a regisztralasnal!');
-    res.render('regisztralas', {
+    res.render('auth/regisztralas', {
       err: 1,
       errmess: error.details[0].message,
     });
@@ -40,7 +40,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
   }
   if (data.f5kod !== data.f5kodu) {
     console.log('A jelszavak nem egyeznek!');
-    res.render('regisztralas', {
+    res.render('auth/regisztralas', {
       err: 1,
       errmess: 'A jelszavak nem egyeznek',
     });
@@ -56,7 +56,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
     ]);
     if (id[0].length !== 0) {
       console.log('Mar letezik ilyen nevu felhasznalo!');
-      res.render('regisztralas', {
+      res.render('auth/regisztralas', {
         err: 1,
         errmess: 'Hiba történt regisztráláskor, adj meg más felhasználónevet!',
       });
@@ -65,7 +65,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
 
     if (id2[0].length !== 0) {
       console.log('Az email mar hasznalatban!');
-      res.render('regisztralas', {
+      res.render('auth/regisztralas', {
         err: 1,
         errmess: 'Hiba történt regisztráláskor, adj meg más emailt!',
       });

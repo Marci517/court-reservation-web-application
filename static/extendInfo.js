@@ -13,10 +13,10 @@ function getMessage(item, PID, index) {
 
       console.log(ujnyitvatartaskezd);
       const spanLeiras = document.createElement('span');
-      spanLeiras.textContent = ujnyitvatartasleiras;
+      spanLeiras.textContent = `Leírás: ${ujnyitvatartasleiras}`;
 
       const spanNyit = document.createElement('span');
-      spanNyit.textContent = `${ujnyitvatartaskezd}-${ujnyitvatartasveg}`;
+      spanNyit.textContent = `Nyitvatartás: ${ujnyitvatartaskezd}-${ujnyitvatartasveg}`;
 
       if (extended[index] === 0) {
         spanLeiras.classList.add('visible');

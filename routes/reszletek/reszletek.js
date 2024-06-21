@@ -22,7 +22,7 @@ router.get('/reszletek', async (req, res) => {
       fogcheck = 1;
     }
     console.log(result[0]);
-    res.render('reszletek', {
+    res.render('reszletek/reszletek', {
       userid: user,
       bej: bejelentkezesTipus,
       result: result[0],

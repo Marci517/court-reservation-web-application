@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <header>
+            <h1>
+                Felhasználók törlése
+            </h1>
+        </header>
+
+
+        <span>Bejelentkezve mint: <%= bej %> </span>
+        <% result.forEach(resul=> { %>
+            <% if (resul.FelNev!=='admin' && resul.FelNev!=='Vendeg' ) { %>
+                <div>
+                    <p>
+                        <%= resul.FelNev %>
+                    </p>
+                    <form action="/torlesfel" method="POST">
+                        <input type="hidden" name="FID" id="FID" value="<%= resul.FID %>">
+                        <button type="submit">Felhasználó törlése</button>
+                    </form>
+
+                </div>
+                <% } %>
+                    <% }); %>
+
+                        <form action="/" method="GET">
+                            <button type="submit">Vissza
+                                a
+                                főoldalra</button>
+                        </form>
+                        <% if (err===1) { %>
+                            <p>
+                                <%= errmess %>
+                            </p>
+                            <% } %>
+                                <%- include('../partials/footer.ejs') %>
+
+    </body>
+
+</html>

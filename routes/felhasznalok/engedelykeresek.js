@@ -12,7 +12,7 @@ router.get('/engedelykeresek', async (req, res) => {
   }
   const resul = await getFelhasznalokNeveiNemElfogadott();
   console.log(resul);
-  res.render('engedelykeresek', {
+  res.render('admin/engedelykeresek', {
     err: 0,
     errmess: '',
     bej: req.session.username,

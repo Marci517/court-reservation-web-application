@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include('partials/head.ejs') %>
+<%- include('../partials/head.ejs') %>
 
     <body>
         <header>
@@ -9,8 +9,8 @@
                 Adataim
             </h1>
         </header>
-        <%- include('partials/logButtons.ejs') %>
-            <span>Felhasználónév: <%= bej %></span>
+        <span>Felhasználónév: <%= bej %></span>
+        <%- include('../partials/logButtons.ejs') %>
             <form action="/nevcsere" method="GET">
                 <button type="submit">Név módosítása</button>
             </form>
@@ -32,7 +32,7 @@
             <form action="/" method="GET">
                 <button type="submit">Vissza a főoldalra</button>
             </form>
-            <%- include('partials/footer.ejs') %>
+            <%- include('../partials/footer.ejs') %>
 
     </body>
 

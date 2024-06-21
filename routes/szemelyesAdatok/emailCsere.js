@@ -13,7 +13,7 @@ router.get('/emailcsere', (req, res) => {
     });
     return;
   }
-  res.render('emailCsere', {
+  res.render('adatok/emailCsere', {
     err: 0,
     errmess: '',
     bej: req.session.username,
@@ -36,7 +36,7 @@ router.post('/emailcsereform', express.urlencoded({ extended: true }), async (re
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Hibas email cim vagy jelszo!');
-    res.render('emailCsere', {
+    res.render('adatok/emailCsere', {
       err: 1,
       errmess: 'Hibás email vagy jelszó',
       bej: req.session.username,
@@ -53,7 +53,7 @@ router.post('/emailcsereform', express.urlencoded({ extended: true }), async (re
 
     if (id2[0].length !== 0) {
       console.log('Az email mar hasznalatban!');
-      res.render('emailCsere', {
+      res.render('adatok/emailCsere', {
         err: 1,
         errmess: 'Hiba törtent az email cserénél, adj meg más emailt!',
         bej: req.session.username,
@@ -62,7 +62,7 @@ router.post('/emailcsereform', express.urlencoded({ extended: true }), async (re
     }
     if (!match) {
       console.log('Helytelen jelszo!');
-      res.render('emailCsere', {
+      res.render('adatok/emailCsere', {
         err: 1,
         errmess: 'Nem helyes új email cím vagy jelszó',
         bej: req.session.username,

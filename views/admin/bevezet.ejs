@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include('partials/head.ejs') %>
+<%- include('../partials/head.ejs') %>
 
     <body>
         <header>
@@ -10,7 +10,7 @@
             </h1>
         </header>
         <span>Bejelentkezve mint: <%= bej %> </span>
-        <%- include('partials/logButtons.ejs') %>
+        <%- include('../partials/logButtons.ejs') %>
             <form action="/palyabevezet" method="POST">
                 <label for="palyak">Válassz egy pályát: </label>
                 <select name="palyak" id="palyak" required>
@@ -40,7 +40,7 @@
                     <form action="/" method="GET">
                         <button type="submit">Vissza a főoldalra</button>
                     </form>
-                    <%- include('partials/footer.ejs') %>
+                    <%- include('../partials/footer.ejs') %>
 
     </body>
 

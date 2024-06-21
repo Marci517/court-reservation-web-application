@@ -15,7 +15,7 @@ router.get('/adatok', (req, res) => {
     });
     return;
   }
-  res.render('adatok', {
+  res.render('adatok/adatok', {
     bej: bejelentkezesTipus,
     email: bejelentkezesEmail,
     err: 0,

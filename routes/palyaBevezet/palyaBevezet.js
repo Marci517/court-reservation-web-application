@@ -29,7 +29,7 @@ router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req,
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Helytelen bemenet a palyabevezetnel!');
-    res.render('bevezet', {
+    res.render('admin/bevezet', {
       bej: bejelentkezesTipus,
       err: 1,
       errmess: error.details[0].message,

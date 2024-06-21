@@ -42,7 +42,7 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     }
     console.log(data);
     if (!req.session.userid) {
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -57,7 +57,7 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!regex.test(data.f4kezd) || !regex.test(data.f4kezd) || !validateDate(data.f4datum)) {
       console.log('Helytelen bemenet a foglalasnal!');
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -74,7 +74,7 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     ]);
     if (ellenorzo1[0].length !== 0) {
       console.log('Mar van foglalas ebben az intervallumban');
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -89,7 +89,7 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     const inputDate = new Date(data.f4datum);
     if (ellenorzo2[0].length === 0 || inputDate < today) {
       console.log('Nincs nyitva ebben az intervallumban!');
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -108,7 +108,7 @@ router.post('/foglalas', express.urlencoded({ extended: true }), async (req, res
     if (foglalasokuj[0].length === 0) {
       fogcheck = 1;
     }
-    res.render('reszletek', {
+    res.render('reszletek/reszletek', {
       userid: user,
       bej: bejelentkezesTipus,
       result: result[0],
@@ -148,7 +148,7 @@ router.get('/foglalasszures', async (req, res) => {
         fogcheck = 1;
       }
       console.log(result[0]);
-      res.render('reszletek', {
+      res.render('reszletek/reszletek', {
         userid: user,
         bej: bejelentkezesTipus,
         result: result[0],
@@ -163,7 +163,7 @@ router.get('/foglalasszures', async (req, res) => {
       fogcheck = 1;
     }
 
-    res.render('reszletek', {
+    res.render('reszletek/reszletek', {
       userid: user,
       bej: bejelentkezesTipus,
       result: result[0],
@@ -198,7 +198,7 @@ router.get('/foglalasosszes', async (req, res) => {
       fogcheck = 1;
     }
 
-    res.render('reszletek', {
+    res.render('reszletek/reszletek', {
       userid: user,
       bej: bejelentkezesTipus,
       result: result[0],

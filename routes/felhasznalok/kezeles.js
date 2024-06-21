@@ -12,7 +12,7 @@ router.get('/kezeles', async (req, res) => {
   }
   const resul = await getFelhasznalokNevei();
   console.log(resul);
-  res.render('felhasznalokTorlese', {
+  res.render('admin/felhasznalokTorlese', {
     err: 0,
     errmess: '',
     bej: req.session.username,

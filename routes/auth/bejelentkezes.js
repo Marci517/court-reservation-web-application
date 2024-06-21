@@ -13,7 +13,7 @@ router.get('/bejelentkezes', (req, res) => {
     });
     return;
   }
-  res.render('bejelentkezes', {
+  res.render('auth/bejelentkezes', {
     err: 0,
     errmess: '',
   });
@@ -35,7 +35,7 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Hibas email cim vagy jelszo!');
-    res.render('bejelentkezes', {
+    res.render('auth/bejelentkezes', {
       err: 1,
       errmess: 'Hibás email vagy jelszó',
     });
@@ -46,7 +46,7 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
     const id = await getIdByEmail(data.f6email);
     if (id[0].length === 0) {
       console.log('Nem letezik ilyen email!');
-      res.render('bejelentkezes', {
+      res.render('auth/bejelentkezes', {
         err: 1,
         errmess: 'Nem helyes email cím vagy jelszó',
       });
@@ -56,7 +56,7 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
     const match = await bcrypt.compare(data.f6kod, datkod[0][0].Kod);
     if (!match) {
       console.log('Helytelen jelszo!');
-      res.render('bejelentkezes', {
+      res.render('auth/bejelentkezes', {
         err: 1,
         errmess: 'Nem helyes email cím vagy jelszó',
       });
@@ -68,7 +68,7 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
     console.log(elfogadott[0]);
     if (elfogadott[0][0].Elfogadott === 0) {
       console.log('Nincs engedely meg!');
-      res.render('bejelentkezes', {
+      res.render('auth/bejelentkezes', {
         err: 1,
         errmess: 'Nincs hitelesítve a profilja! Kérjük várjon, majd probálja újra!',
       });

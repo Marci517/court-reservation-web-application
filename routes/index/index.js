@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
   const { error } = expected.validate(data);
   if (error != null) {
     console.log('Helytelen bemenet a kliensszurnel!');
-    res.render('index', {
+    res.render('index/index', {
       bej: bejelentkezesTipus,
       resul: results[0],
       err: 1,
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
 
   if (min > max) {
     console.log('Helytelen kliensszurnel, min > max miatt!');
-    res.render('index', {
+    res.render('index/index', {
       bej: bejelentkezesTipus,
       resul: results[0],
       err: 1,
@@ -58,7 +58,7 @@ router.get('/', async (req, res) => {
 
     if (results[0].length === 0) {
       console.log('Nincs keresett palya');
-      res.render('index', {
+      res.render('index/index', {
         bej: bejelentkezesTipus,
         resul: results[0],
         err: 1,
@@ -66,7 +66,7 @@ router.get('/', async (req, res) => {
       });
       return;
     }
-    res.render('index', {
+    res.render('index/index', {
       bej: bejelentkezesTipus,
       resul: results[0],
       err: 0,

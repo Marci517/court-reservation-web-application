@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <header>
+            <h1>
+                Jelszó csere
+            </h1>
+        </header>
+        <% if (bej !=='Vendeg' ) { %>
+            <span>Bejelentkezve mint: <%= bej %> </span>
+            <% } %>
+                <form action="/jelszocsereform" method="POST">
+                    <label for="f8kod">Add meg a kódot: </label>
+                    <input type="password" name="f8kod" id="f8kod" required>
+                    <label for="f8koduj">Add meg az új kódot: </label>
+                    <input type="password" name="f8koduj" id="f8koduj" required>
+                    <label for="f8koduj2">Add meg az új kódot megint: </label>
+                    <input type="password" name="f8koduj2" id="f8koduj2" required>
+
+                    <button type="submit">Submit</button>
+                </form>
+
+                <% if (err===1) { %>
+                    <p>
+                        <%= errmess %>
+                    </p>
+                    <% } %>
+                        <form action="/" method="GET">
+                            <button type="submit">Vissza a főoldalra</button>
+                        </form>
+                        <%- include('../partials/footer.ejs') %>
+
+    </body>
+
+</html>

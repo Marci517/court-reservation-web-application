@@ -9,7 +9,7 @@ router.get('/felhasznalok', (req, res) => {
     });
     return;
   }
-  res.render('felhasznalok', {
+  res.render('admin/felhasznalok', {
     err: 0,
     errmess: '',
     bej: req.session.username,
