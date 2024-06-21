@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs') %>
+
+    <body>
+        <header>
+            <h1>
+                Felhasználók
+            </h1>
+        </header>
+        <% if (bej !=='Vendeg' ) { %>
+            <span>Bejelentkezve mint: <%= bej %> </span>
+            <% } %>
+            <form action="/kezeles" method="GET">
+                <button type="submit">Felhasználók törlése</button>
+            </form>
+
+            <form action="/engedelykeresek" method="GET">
+                <button type="submit">Engedélykérések</button>
+            </form>
+
+            <form action="/" method="GET">
+                <button type="submit">Vissza a főoldalra</button>
+            </form>
+            <%- include('partials/footer.ejs') %>
+
+    </body>
+
+</html>

@@ -5,11 +5,11 @@ const router = express.Router();
 router.get('/bevezet', (req, res) => {
   console.log('bent a bevezetben');
   let bejelentkezesTipus = '';
-  if (req.session.username) {
+  if (req.session.username === 'admin') {
     bejelentkezesTipus = req.session.username;
   } else {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }

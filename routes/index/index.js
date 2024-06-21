@@ -43,7 +43,7 @@ router.get('/', async (req, res) => {
       bej: bejelentkezesTipus,
       resul: results[0],
       err: 1,
-      errmess: 'Helytelen kliensszurnel, min > max miatt!',
+      errmess: 'Helytelen bemenet, az első mező értéke nagyobb, mint a másodiké!',
     });
     return;
   }
@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
         bej: bejelentkezesTipus,
         resul: results[0],
         err: 1,
-        errmess: 'Nincs keresett palya',
+        errmess: 'Nincs keresett pálya',
       });
       return;
     }
@@ -75,7 +75,7 @@ router.get('/', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba a fooldal betoltesekor, probald ujra!',
+      error: 'Hiba a főoldal betöltésekor, próbáld újra!',
     });
   }
 });

@@ -5,6 +5,11 @@ const router = express.Router();
 
 router.post('/torlesfog', express.urlencoded({ extended: true }), async (req, res) => {
   const data = req.body;
+  if (!req.session.username) {
+    res.render('error', {
+      error: 'Hiba történt a foglalás közben, próbáld újra!',
+    });
+  }
   console.log(data);
   const fogId = data.FogID;
   try {
@@ -13,14 +18,14 @@ router.post('/torlesfog', express.urlencoded({ extended: true }), async (req, re
     console.log(result);
     if (!result) {
       res.render('error', {
-        error: 'Hiba tortent a foglalas torlesenel, kerlek probald ujra!',
+        error: 'Hiba történt a foglalás közben, próbáld újra!',
       });
       return;
     }
   } catch (error) {
     console.log(error);
     res.render('error', {
-      error: 'Hiba tortent a foglalas torlesenel, kerlek probald ujra!',
+      error: 'Hiba történt a foglalás közben, próbáld újra!',
     });
     return;
   }

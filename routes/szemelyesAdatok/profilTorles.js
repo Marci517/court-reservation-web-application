@@ -9,17 +9,24 @@ router.get('/profiltorlese', (req, res) => {
   console.log('bent a profil torleseben csereben');
   if (!req.session.username) {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }
   res.render('profilTorlese', {
     err: 0,
     errmess: '',
+    bej: req.session.username,
   });
 });
 
 router.post('/profiltorlesform', express.urlencoded({ extended: true }), async (req, res) => {
+  if (!req.session.username) {
+    res.render('error', {
+      error: 'Az oldal nem elérhető!',
+    });
+    return;
+  }
   const data = req.body;
   const expected = Joi.object({
     f10kod: Joi.string().required(),
@@ -30,7 +37,8 @@ router.post('/profiltorlesform', express.urlencoded({ extended: true }), async (
     console.log('Hibas jelszo!');
     res.render('profilTorlese', {
       err: 1,
-      errmess: 'Hibas jelszo',
+      errmess: 'Hibás jelszó',
+      bej: req.session.username,
     });
     return;
   }
@@ -45,7 +53,8 @@ router.post('/profiltorlesform', express.urlencoded({ extended: true }), async (
       console.log('Helytelen jelszo!');
       res.render('profilTorlese', {
         err: 1,
-        errmess: 'Nem helyes jelszo',
+        errmess: 'Nem helyes jelszó',
+        bej: req.session.username,
       });
       return;
     }
@@ -54,7 +63,7 @@ router.post('/profiltorlesform', express.urlencoded({ extended: true }), async (
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba tortent a profil torlesekor, kerlek probald ujra!',
+      error: 'Hiba történt a profil törlésekor, kérlek próbáld újra!',
     });
     return;
   }

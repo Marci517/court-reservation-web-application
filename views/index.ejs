@@ -6,35 +6,41 @@
     <body>
         <header>
             <h1>
-                Palyak
+                Pályák
             </h1>
         </header>
         <% if (bej !=='Vendeg' ) { %>
-            <span>Bejelentkezve mint: <%= bej %>, </span>
+            <span>Bejelentkezve mint: <%= bej %> </span>
             <% } %>
                 <% if (bej !=='Vendeg' ) { %>
                     <form action="/adatok" method="GET">
-                        <button type="submit">Szemelyes adatok</button>
-                    </form>
-                    <form action="/bevezet" method="GET">
-                        <button type="submit">Palya hozzaadas</button>
+                        <button type="submit">Személyes adatok</button>
                     </form>
                     <% } %>
+                    
+                    <% if (bej ==='admin' ) { %>
+                        <form action="/bevezet" method="GET">
+                            <button type="submit">Pálya hozzáadás</button>
+                        </form>
+                        <form action="/felhasznalok" method="GET">
+                            <button type="submit">Felhasználók</button>
+                        </form>
+                        <% } %>
                         <%- include('partials/logButtons.ejs') %>
                             <form action="/" method="GET">
-                                <label for="palyakkliens">Valassz egy palyat: </label>
+                                <label for="palyakkliens">Válassz egy pályát: </label>
                                 <select name="palyakkliens" id="palyakkliens" required>
-                                    <option value="osszes">Osszes</option>
-                                    <option value="kosar">Kosar</option>
+                                    <option value="osszes">Összes</option>
+                                    <option value="kosar">Kosár</option>
                                     <option value="foci">Foci</option>
                                     <option value="tenisz">Tenisz</option>
-                                    <option value="futas">Futas</option>
+                                    <option value="futas">Futás</option>
                                 </select>
 
-                                <label for="f3orabermin">Add meg a minimum orabert: </label>
+                                <label for="f3orabermin">Add meg a minimum órabért: </label>
                                 <input type="number" name="f3orabermin" id="f3orabermin" min="0">
 
-                                <label for="f3orabermax">Add meg a maximum orabert: </label>
+                                <label for="f3orabermax">Add meg a maximum órabért: </label>
                                 <input type="number" name="f3orabermax" id="f3orabermax" min="0" max="100000">
                                 <button type="submit">Submit</button>
 
@@ -43,11 +49,11 @@
                                 <ul id="palyak_lista">
                                     <% resul.forEach(result=> { %>
                                         <li class="informaciok" data-PID="<%= result.PID %>">
-                                            <span>Palyatipus: <%= result.Nev %>, </span>
-                                            <span>Oraber: <%= result.Oraber %>, </span>
-                                            <span>Cim: <%= result.Cim %>, </span>
-                                            <span class="hidden">Leiras: <%= result.Leiras %>, </span>
-                                            <span class="hidden">Nyitvatartas: <%= result.NyitKezd %>-<%= result.NyitVeg
+                                            <span>Pályatípus: <%= result.Nev %>, </span>
+                                            <span>Órabér: <%= result.Oraber %>, </span>
+                                            <span>Cím: <%= result.Cim %>, </span>
+                                            <span class="hidden">Leírás: <%= result.Leiras %>, </span>
+                                            <span class="hidden">Nyitvatartás: <%= result.NyitKezd %>-<%= result.NyitVeg
                                                         %></span>
                                             <a href="/reszletek?id=<%= result.PID %>">Részletek</a>
                                         </li>

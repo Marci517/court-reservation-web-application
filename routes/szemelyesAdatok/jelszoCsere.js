@@ -9,17 +9,24 @@ router.get('/jelszocsere', (req, res) => {
   console.log('bent az jelszo csereben');
   if (!req.session.username) {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }
   res.render('jelszoCsere', {
     err: 0,
     errmess: '',
+    bej: req.session.username,
   });
 });
 
 router.post('/jelszocsereform', express.urlencoded({ extended: true }), async (req, res) => {
+  if (!req.session.username) {
+    res.render('error', {
+      error: 'Az oldal nem elérhető!',
+    });
+    return;
+  }
   const data = req.body;
   const expected = Joi.object({
     f8kod: Joi.string().required(),
@@ -32,7 +39,8 @@ router.post('/jelszocsereform', express.urlencoded({ extended: true }), async (r
     console.log('Hibas jelszo!');
     res.render('jelszoCsere', {
       err: 1,
-      errmess: 'Hibas jelszo',
+      errmess: 'Hibás jelszó',
+      bej: req.session.username,
     });
     return;
   }
@@ -41,7 +49,8 @@ router.post('/jelszocsereform', express.urlencoded({ extended: true }), async (r
     console.log('Hibas jelszo!');
     res.render('jelszoCsere', {
       err: 1,
-      errmess: 'Nem talal a ket jelszo',
+      errmess: 'Nem talál a két jelszó',
+      bej: req.session.username,
     });
     return;
   }
@@ -55,7 +64,8 @@ router.post('/jelszocsereform', express.urlencoded({ extended: true }), async (r
       console.log('Helytelen jelszo!');
       res.render('jelszoCsere', {
         err: 1,
-        errmess: 'Nem helyes jelszo',
+        errmess: 'Nem helyes jelszó',
+        bej: req.session.username,
       });
       return;
     }
@@ -64,7 +74,7 @@ router.post('/jelszocsereform', express.urlencoded({ extended: true }), async (r
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba tortent a jelszo csereleskor, kerlek probald ujra!',
+      error: 'Hiba történt a jelszó cseréléskor, kérlek próbáld újra!',
     });
     return;
   }

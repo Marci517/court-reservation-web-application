@@ -7,6 +7,14 @@ export function getFelhasznalokNevei() {
   return pool.query(sql);
 }
 
+export function getFelhasznalokNeveiNemElfogadott() {
+  const sql = `SELECT f.FID ,f.FelNev
+  FROM Felhasznalok AS f
+  WHERE f.Elfogadott = 0`;
+
+  return pool.query(sql);
+}
+
 export function getId(nev) {
   const sql = `SELECT f.FID
   FROM Felhasznalok AS f
@@ -52,9 +60,18 @@ export function getPassword(email) {
   return pool.query(sql, values);
 }
 
+export function getHaElfogadott(id) {
+  const sql = `SELECT f.Elfogadott
+  FROM Felhasznalok AS f
+  WHERE f.FID = ?`;
+  const values = [id];
+
+  return pool.query(sql, values);
+}
+
 export function addFelhasznalok(nev, email, kod) {
-  const sql = 'INSERT INTO Felhasznalok (FelNev, Email, Kod) VALUES (?, ?, ?)';
-  const values = [nev, email, kod];
+  const sql = 'INSERT INTO Felhasznalok (FelNev, Email, Kod, Elfogadott) VALUES (?, ?, ?, ?)';
+  const values = [nev, email, kod, 0];
 
   return pool.query(sql, values);
 }
@@ -64,6 +81,15 @@ export function updateEmail(id, email) {
                SET Email = ?
                WHERE FID = ?`;
   const values = [email, id];
+
+  return pool.query(sql, values);
+}
+
+export function updateElfogadott(id) {
+  const sql = `UPDATE Felhasznalok
+               SET Elfogadott = ?
+               WHERE FID = ?`;
+  const values = [1, id];
 
   return pool.query(sql, values);
 }
@@ -86,6 +112,7 @@ export function updatePassword(id, kod) {
   return pool.query(sql, values);
 }
 
+// foglalas felhasznalo szerint torolve
 export function torlesFoglalas(id) {
   const sql = 'DELETE FROM Foglalasok WHERE FID = ?';
   const values = [id];

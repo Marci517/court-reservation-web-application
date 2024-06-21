@@ -9,10 +9,13 @@
                 Email csere
             </h1>
         </header>
+        <% if (bej !=='Vendeg' ) { %>
+            <span>Bejelentkezve mint: <%= bej %> </span>
+            <% } %>
         <form action="/emailcsereform" method="POST">
-            <label for="f7email">Add meg az uj email cimet: </label>
+            <label for="f7email">Add meg az új email címet: </label>
             <input type="email" name="f7email" id="f7email" required>
-            <label for="f7kod">Add meg a kodot: </label>
+            <label for="f7kod">Add meg a kódot: </label>
             <input type="password" name="f7kod" id="f7kod" required>
             <button type="submit">Submit</button>
         </form>
@@ -23,7 +26,7 @@
             </p>
             <% } %>
                 <form action="/" method="GET">
-                    <button type="submit">Vissza a fooldalra</button>
+                    <button type="submit">Vissza a főoldalra</button>
                 </form>
                 <%- include('partials/footer.ejs') %>
 

@@ -8,19 +8,19 @@ function deleteImage(button, nev) {
     .then((response) => {
       if (response.status === 204) {
         button.parentElement.remove();
-        alert('Sikeres torles');
+        alert('Sikeres törlés');
       } else if (response.status === 404) {
         console.log(`Kep ID: ${nev} nincs meg.`);
-        alert('Sikertelen torles');
+        alert('Sikertelen törlés');
       } else {
         console.log('Hiba a kep torlesenel.');
-        alert('Sikertelen torles');
+        alert('Sikertelen törlés');
       }
     })
     .catch((err) => {
       console.error('Error:', err);
       console.log('Hiba a kep torlesenel.');
-      alert('Sikertelen torles');
+      alert('Sikertelen törlés');
     });
 }
 

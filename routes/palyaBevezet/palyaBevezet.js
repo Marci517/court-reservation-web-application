@@ -6,7 +6,15 @@ const router = express.Router();
 
 router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('bent a palyabevezetben');
-  const bejelentkezesTipus = req.session.username;
+  let bejelentkezesTipus = '';
+  if (req.session.username === 'admin') {
+    bejelentkezesTipus = req.session.username;
+  } else {
+    res.render('error', {
+      error: 'Az oldal nem elérhető!',
+    });
+    return;
+  }
   const data = req.body;
   const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
   const expected = Joi.object({
@@ -33,7 +41,7 @@ router.post('/palyabevezet', express.urlencoded({ extended: true }), async (req,
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba tortent a palya hozzaadasakor, kerlek probald ujra!',
+      error: 'Hiba történt a pálya hozzáadásakor, kérlek próbáld újra!',
     });
     return;
   }

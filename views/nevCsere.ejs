@@ -6,13 +6,16 @@
     <body>
         <header>
             <h1>
-                Nev csere
+                Név csere
             </h1>
         </header>
+        <% if (bej !=='Vendeg' ) { %>
+            <span>Bejelentkezve mint: <%= bej %>, </span>
+            <% } %>
         <form action="/nevcsereform" method="POST">
-            <label for="f8nev">Add meg az uj nevet: </label>
+            <label for="f8nev">Add meg az új nevet: </label>
             <input type="text" name="f8nev" id="f8nev" required>
-            <label for="f8kod">Add meg a kodot: </label>
+            <label for="f8kod">Add meg a kódot: </label>
             <input type="password" name="f8kod" id="f8kod" required>
             <button type="submit">Submit</button>
         </form>
@@ -23,7 +26,7 @@
             </p>
             <% } %>
                 <form action="/" method="GET">
-                    <button type="submit">Vissza a fooldalra</button>
+                    <button type="submit">Vissza a főoldalra</button>
                 </form>
                 <%- include('partials/footer.ejs') %>
 

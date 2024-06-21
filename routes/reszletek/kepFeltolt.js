@@ -13,6 +13,12 @@ const router = express.Router();
 router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   console.log('bent a kepfeltoltben');
   const bejelentkezesTipus = req.session.username;
+  if (bejelentkezesTipus !== 'admin') {
+    res.render('error', {
+      error: 'Hiba történt a képfeltöltés közben, próbáld újra!',
+    });
+    return;
+  }
   const user = req.session.userid;
   const data = req.body;
   const fileHandler = req.file;
@@ -23,7 +29,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
       getCountFenykepek(data.f1palyaid),
     ]);
 
-    let fogcheck = 0;
+    let fogcheck = 0; // vane foglalas vagy sincs, ha nincs kiirjuk hogy nincs
     if (foglalasok[0].length === 0) {
       fogcheck = 1;
     }
@@ -35,7 +41,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
         bej: bejelentkezesTipus,
         result: result[0],
         err: 1,
-        errmess: 'Nincs feltoltve kep!',
+        errmess: 'Nincs feltöltve kép!',
         fog: fogcheck,
         foglalasok: foglalasok[0],
       });
@@ -49,7 +55,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
         bej: bejelentkezesTipus,
         result: result[0],
         err: 1,
-        errmess: 'A feltoltott allomany nem kep formatum!',
+        errmess: 'A feltöltött állomány nem kép formátum!',
         fog: fogcheck,
         foglalasok: foglalasok[0],
       });
@@ -98,7 +104,7 @@ router.post('/kepfeltolt', multerUpload.single('f1kep'), async (req, res) => {
   } catch (error) {
     console.log(error);
     res.render('error', {
-      error: 'Hiba tortent a kep feltoltesenel, kerlek probald ujra!',
+      error: 'Hiba történt a kép feltöltésénél, kérlek próbáld újra!',
     });
   }
 });

@@ -1,7 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
-import { getIdByEmail, getPassword, getName } from '../../db/dbFelhasznalok.js';
+import { getIdByEmail, getPassword, getName, getHaElfogadott } from '../../db/dbFelhasznalok.js';
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get('/bejelentkezes', (req, res) => {
   console.log('bent a bejelentkezesben');
   if (req.session.username) {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }
@@ -22,7 +22,7 @@ router.get('/bejelentkezes', (req, res) => {
 router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async (req, res) => {
   if (req.session.username) {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }
@@ -37,7 +37,7 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
     console.log('Hibas email cim vagy jelszo!');
     res.render('bejelentkezes', {
       err: 1,
-      errmess: 'Hibas email vagy jelszo',
+      errmess: 'Hibás email vagy jelszó',
     });
     return;
   }
@@ -48,7 +48,7 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
       console.log('Nem letezik ilyen email!');
       res.render('bejelentkezes', {
         err: 1,
-        errmess: 'Nem helyes email cim vagy jelszo',
+        errmess: 'Nem helyes email cím vagy jelszó',
       });
       return;
     }
@@ -58,7 +58,19 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
       console.log('Helytelen jelszo!');
       res.render('bejelentkezes', {
         err: 1,
-        errmess: 'Nem helyes email cim vagy jelszo',
+        errmess: 'Nem helyes email cím vagy jelszó',
+      });
+      return;
+    }
+    console.log(id[0][0].FID);
+
+    const elfogadott = await getHaElfogadott(id[0][0].FID); // ha az admin engedelyezte vagy sem
+    console.log(elfogadott[0]);
+    if (elfogadott[0][0].Elfogadott === 0) {
+      console.log('Nincs engedely meg!');
+      res.render('bejelentkezes', {
+        err: 1,
+        errmess: 'Nincs hitelesítve a profilja! Kérjük várjon, majd probálja újra!',
       });
       return;
     }
@@ -70,7 +82,7 @@ router.post('/bejelentkezesform', express.urlencoded({ extended: true }), async 
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba tortent a bejelentkezeskor, kerlek probald ujra!',
+      error: 'Hiba történt a bejelentkezéskor, kérlek próbáld újra!',
     });
     return;
   }

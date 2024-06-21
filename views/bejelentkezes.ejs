@@ -6,13 +6,13 @@
     <body>
         <header>
             <h1>
-                Bejelentkezes
+                Bejelentkezés
             </h1>
         </header>
         <form action="/bejelentkezesform" method="POST">
-            <label for="f6email">Add meg az email cimet: </label>
+            <label for="f6email">Add meg az email címet: </label>
             <input type="email" name="f6email" id="f6email" required>
-            <label for="f6kod">Add meg a kodot: </label>
+            <label for="f6kod">Add meg a kódot: </label>
             <input type="password" name="f6kod" id="f6kod" required>
             <button type="submit">Submit</button>
         </form>
@@ -23,7 +23,7 @@
             </p>
             <% } %>
                 <form action="/" method="GET">
-                    <button type="submit">Vissza a fooldalra</button>
+                    <button type="submit">Vissza a főoldalra</button>
                 </form>
                 <%- include('partials/footer.ejs') %>
 

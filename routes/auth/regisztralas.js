@@ -9,7 +9,7 @@ router.get('/regisztralas', (req, res) => {
   console.log('bent a regisztralasban');
   if (req.session.username) {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }
@@ -49,6 +49,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
 
   try {
     const [kod, id, id2] = await Promise.all([
+      // az id-k arra szolgalnak, hogy megnezzem mar vane ilyen nev, email az adatbazisban
       bcrypt.hash(data.f5kod, 10),
       getId(data.f5nev),
       getIdByEmail(data.f5email),
@@ -57,7 +58,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
       console.log('Mar letezik ilyen nevu felhasznalo!');
       res.render('regisztralas', {
         err: 1,
-        errmess: 'Hiba tortent a felhasznalo hozzaadasakor, adj meg mas felhasznalonevet!',
+        errmess: 'Hiba történt regisztráláskor, adj meg más felhasználónevet!',
       });
       return;
     }
@@ -66,7 +67,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
       console.log('Az email mar hasznalatban!');
       res.render('regisztralas', {
         err: 1,
-        errmess: 'Hiba tortent a felhasznalo hozzaadasakor, adj meg mas emailt!',
+        errmess: 'Hiba történt regisztráláskor, adj meg más emailt!',
       });
       return;
     }
@@ -74,7 +75,7 @@ router.post('/regisztralasform', express.urlencoded({ extended: true }), async (
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba tortent a felhasznalo hozzaadasakor, kerlek probald ujra!',
+      error: 'Hiba történt a felhasználó hozzáadásakor, kérlek próbáld újra!',
     });
     return;
   }

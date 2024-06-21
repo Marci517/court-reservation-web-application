@@ -38,7 +38,7 @@ function getMessage(item, PID, index) {
     })
     .catch((error) => {
       console.error('Hiba történt:', error);
-      alert('Hiba tortent!');
+      alert('Hiba történt!');
     });
 }
 

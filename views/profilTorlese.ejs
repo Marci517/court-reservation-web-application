@@ -6,11 +6,14 @@
     <body>
         <header>
             <h1>
-                Profil torlese
+                Profil törlése
             </h1>
         </header>
+        <% if (bej !=='Vendeg' ) { %>
+            <span>Bejelentkezve mint: <%= bej %> </span>
+            <% } %>
         <form action="/profiltorlesform" method="POST">
-            <label for="f10kod">Add meg a kodot: </label>
+            <label for="f10kod">Add meg a kódot: </label>
             <input type="password" name="f10kod" id="f10kod" required>
             <button type="submit">Submit</button>
         </form>
@@ -21,7 +24,7 @@
             </p>
             <% } %>
                 <form action="/" method="GET">
-                    <button type="submit">Vissza a fooldalra</button>
+                    <button type="submit">Vissza a főoldalra</button>
                 </form>
                 <%- include('partials/footer.ejs') %>
 

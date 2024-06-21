@@ -9,17 +9,24 @@ router.get('/nevcsere', (req, res) => {
   console.log('bent az email csereben');
   if (!req.session.username) {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }
   res.render('nevCsere', {
     err: 0,
     errmess: '',
+    bej: req.session.username,
   });
 });
 
 router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req, res) => {
+  if (!req.session.username) {
+    res.render('error', {
+      error: 'Az oldal nem elérhető!',
+    });
+    return;
+  }
   const data = req.body;
   const expected = Joi.object({
     f8nev: Joi.string().required(),
@@ -28,10 +35,11 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
 
   const { error } = expected.validate(data);
   if (error != null) {
-    console.log('Hibas nev vagy jelszo!');
+    console.log('Hibás név vagy jelszó!');
     res.render('nevCsere', {
       err: 1,
-      errmess: 'Hibas nev vagy jelszo',
+      errmess: 'Hibás név vagy jelszó!',
+      bej: req.session.username,
     });
     return;
   }
@@ -47,7 +55,8 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
       console.log('A nev mar hasznalatban!');
       res.render('nevCsere', {
         err: 1,
-        errmess: 'Hiba tortent a nev cserenel, adj meg mas nevet!',
+        errmess: 'Hiba történt a név cserénél, adj meg más nevet!',
+        bej: req.session.username,
       });
       return;
     }
@@ -55,7 +64,8 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
       console.log('Helytelen jelszo!');
       res.render('nevCsere', {
         err: 1,
-        errmess: 'Nem helyes uj nev vagy jelszo',
+        errmess: 'Nem helyes új név vagy jelszó',
+        bej: req.session.username,
       });
       return;
     }
@@ -63,7 +73,7 @@ router.post('/nevcsereform', express.urlencoded({ extended: true }), async (req,
   } catch (err) {
     console.log(err);
     res.render('error', {
-      error: 'Hiba tortent a nev csereleskor, kerlek probald ujra!',
+      error: 'Hiba történt a név cseréléskor, kérlek próbáld újra!',
     });
     return;
   }

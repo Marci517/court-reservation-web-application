@@ -6,7 +6,7 @@
     <body>
         <header>
             <h1>
-                Reszletek
+                Részletek
             </h1>
         </header>
 
@@ -14,19 +14,19 @@
             <span>Bejelentkezve mint: <%= bej %>, </span>
             <% } %>
                 <%- include('partials/logButtons.ejs') %>
-                    <span>Palyatipus: <%= result[0].Nev %>, </span>
-                    <span>Oraber: <%= result[0].Oraber %>, </span>
-                    <span>Cim: <%= result[0].Cim %>, </span>
-                    <span>Leiras: <%= result[0].Leiras %></span>
-                    <span>Nyitvatartas: <%= result[0].NyitKezd %>-<%= result[0].NyitVeg %></span>
+                    <span>Palyatípus: <%= result[0].Nev %>, </span>
+                    <span>Órabér: <%= result[0].Oraber %>, </span>
+                    <span>Cím: <%= result[0].Cim %>, </span>
+                    <span>Leírás: <%= result[0].Leiras %></span>
+                    <span>Nyitvatartás: <%= result[0].NyitKezd %>-<%= result[0].NyitVeg %></span>
                     <% const pid=result[0].PID; %>
 
                         <% result.forEach(resul=> { %>
                             <% if (resul.FNev!==null) { %>
                                 <div>
-                                    <img src="<%= resul.FNev %>" alt="Nem elerheto">
-                                    <% if (bej !=='Vendeg' ) { %>
-                                        <button class="torlesgombok" data-FNev="<%= resul.FNev %>">Torles</button>
+                                    <img src="<%= resul.FNev %>" alt="Nem elérhető">
+                                    <% if (bej ==='admin' ) { %>
+                                        <button class="torlesgombok" data-FNev="<%= resul.FNev %>">Törlés</button>
                                         <% } %>
                                 </div>
                                 <% } %>
@@ -39,11 +39,29 @@
                                             </p>
                                             <% } %>
 
+                                            <% if (bej ==='admin' ) { %>
+                                                <form action="/foglalasszures" method="GET">
+                                                    <label for="f4datumsz">Szűrj dátum szerint: </label>
+                                                    <input type="date" name="f4datumsz" id="f4datumsz" required>
+                                                    <input type="hidden" name="f4palyaidsz" id="f4palyaidsz"
+                                                            value="<%= pid %>">
+                                                    <button type="submit">Submit</button>
+                                                </form>
+
+                                                <form action="/foglalasosszes" method="GET">
+                                                    <input type="hidden" name="f4palyaido" id="f4palyaido"
+                                                            value="<%= pid %>">
+                                                    <button type="submit">Összes foglalás</button>
+                                                </form>
+                                                <% } %>
+
                                                 <% if (bej !=='Vendeg' ) { %>
                                                     <form action="/foglalas" method="POST">
-                                                        <label for="f4kezd">Add meg a kezdesi idot: </label>
+                                                        <label for="f4datum">Add meg a dátumot: </label>
+                                                        <input type="date" name="f4datum" id="f4datum" required>
+                                                        <label for="f4kezd">Add meg a kezdési időt: </label>
                                                         <input type="time" name="f4kezd" id="f4kezd" required>
-                                                        <label for="f4vegez">Add meg a vegzesi idot: </label>
+                                                        <label for="f4vegez">Add meg a végzési időt: </label>
                                                         <input type="time" name="f4vegez" id="f4vegez" required>
                                                         <input type="hidden" name="f4palyaid" id="f4palyaid"
                                                             value="<%= pid %>">
@@ -57,23 +75,23 @@
                                                         <% } %>
 
                                                             <% if (err===10) { %>
-                                                                <p>Sikeres foglalas!</p>
+                                                                <p>Sikeres foglalás!</p>
                                                                 <% } %>
                                                                     <% if (fog !==1) { %>
                                                                         <% foglalasok.forEach(foglalas=> { %>
-                                                                            <span>Datum: <%= foglalas.Datum %>,
+                                                                            <span>Dátum: <%= foglalas.Datum %>,
                                                                             </span>
-                                                                            <span>Kezdes Idopont: <%= foglalas.Kezdes %>
+                                                                            <span>Kezdés időpont: <%= foglalas.Kezdes %>
                                                                                     , </span>
-                                                                            <span>Vege: <%= foglalas.Vegzes %>,
+                                                                            <span>Vége: <%= foglalas.Vegzes %>,
                                                                             </span>
-                                                                            <% if (foglalas.FID===userid) { %>
+                                                                            <% if (foglalas.FID===userid || bej === 'admin') { %>
                                                                                 <form action="/torlesfog" method="POST">
                                                                                     <input type="hidden" name="FogID"
                                                                                         id="FogID"
                                                                                         value="<%= foglalas.FogID %>">
-                                                                                    <button type="submit">Foglalas
-                                                                                        Torlese</button>
+                                                                                    <button type="submit">Foglalás
+                                                                                        Törlése</button>
                                                                                 </form>
                                                                                 <% } %>
                                                                                     <% }); %>
@@ -84,7 +102,7 @@
 
                                                                                                     <footer>
                                                                                                         <% if (bej
-                                                                                                            !=='Vendeg'
+                                                                                                            ==='admin'
                                                                                                             ) { %>
                                                                                                             <form
                                                                                                                 action="/kepfeltolt"
@@ -96,10 +114,10 @@
                                                                                                                     id="f1palyaid"
                                                                                                                     value="<%= pid %>">
                                                                                                                 <label
-                                                                                                                    for="f1kep">Tolts
+                                                                                                                    for="f1kep">Tölts
                                                                                                                     fel
                                                                                                                     egy
-                                                                                                                    kepet:
+                                                                                                                    képet:
                                                                                                                 </label>
                                                                                                                 <input
                                                                                                                     type="file"
@@ -116,13 +134,13 @@
                                                                                                                     <button
                                                                                                                         type="submit">Vissza
                                                                                                                         a
-                                                                                                                        fooldalra</button>
+                                                                                                                        főoldalra</button>
                                                                                                                 </form>
                                                                                                                 Bencze
                                                                                                                 Marton,
                                                                                                                 bmim2214,
                                                                                                                 521,
-                                                                                                                lab6
+                                                                                                                projekt
                                                                                                     </footer>
 
     </body>

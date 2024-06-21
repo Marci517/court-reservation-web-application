@@ -10,27 +10,27 @@
             </h1>
         </header>
         <%- include('partials/logButtons.ejs') %>
-            <span>Felhasznalonev: <%= bej %></span>
+            <span>Felhasználónév: <%= bej %></span>
             <form action="/nevcsere" method="GET">
-                <button type="submit">Nev modositasa</button>
+                <button type="submit">Név módosítása</button>
             </form>
 
             <span>Email: <%= email %></span>
             <form action="/emailcsere" method="GET">
-                <button type="submit">Email modositasa</button>
+                <button type="submit">Email módosítása</button>
             </form>
 
-            <span>Jelszo: ******</span>
+            <span>Jelszó: ******</span>
             <form action="/jelszocsere" method="GET">
-                <button type="submit">Jelszo modositasa</button>
+                <button type="submit">Jelszó módosítása</button>
             </form>
 
             <form action="/profiltorlese" method="GET">
-                <button type="submit">Profil torlese</button>
+                <button type="submit">Profil törlése</button>
             </form>
 
             <form action="/" method="GET">
-                <button type="submit">Vissza a fooldalra</button>
+                <button type="submit">Vissza a főoldalra</button>
             </form>
             <%- include('partials/footer.ejs') %>
 

@@ -6,17 +6,17 @@
     <body>
         <header>
             <h1>
-                Regisztralas
+                Regisztrálás
             </h1>
         </header>
         <form action="/regisztralasform" method="POST">
-            <label for="f5nev">Add meg a felhasznalonevet: </label>
+            <label for="f5nev">Add meg a felhasználónevet: </label>
             <input type="text" name="f5nev" id="f5nev" required>
-            <label for="f5email">Add meg az email cimet: </label>
+            <label for="f5email">Add meg az email címet: </label>
             <input type="email" name="f5email" id="f5email" required>
-            <label for="f5kod">Add meg a kodot: </label>
+            <label for="f5kod">Add meg a kódot: </label>
             <input type="password" name="f5kod" id="f5kod" required>
-            <label for="f5kodu">Add meg a kodot ujra: </label>
+            <label for="f5kodu">Add meg a kódot újra: </label>
             <input type="password" name="f5kodu" id="f5kodu" required>
             <button type="submit">Submit</button>
         </form>
@@ -27,7 +27,7 @@
             </p>
             <% } %>
                 <form action="/" method="GET">
-                    <button type="submit">Vissza a fooldalra</button>
+                    <button type="submit">Vissza a főoldalra</button>
                 </form>
                 <%- include('partials/footer.ejs') %>
 

@@ -17,10 +17,13 @@ import requestEmailCsere from './routes/szemelyesAdatok/emailCsere.js';
 import requestNevCsere from './routes/szemelyesAdatok/nevCsere.js';
 import requestJelszoCsere from './routes/szemelyesAdatok/jelszoCsere.js';
 import requestProfilTorles from './routes/szemelyesAdatok/profilTorles.js';
+import requestFelhasznalok from './routes/felhasznalok/felhasznalok.js';
+import requestKezeles from './routes/felhasznalok/kezeles.js';
+import requestEngedely from './routes/felhasznalok/engedelykeresek.js';
 import apiRoutes from './api/index.js';
 
 const app = express();
-
+// bekotesek
 app.use(express.static(path.join(process.cwd(), 'static')));
 app.use(express.static(path.join(process.cwd(), 'uploadDir')));
 app.set('view engine', 'ejs');
@@ -49,6 +52,9 @@ app.use('', requestEmailCsere);
 app.use('', requestNevCsere);
 app.use('', requestJelszoCsere);
 app.use('', requestProfilTorles);
+app.use('', requestFelhasznalok);
+app.use('', requestKezeles);
+app.use('', requestEngedely);
 
 app.listen(8000, () => {
   console.log('Listening on port 8000');

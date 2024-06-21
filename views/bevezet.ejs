@@ -6,28 +6,28 @@
     <body>
         <header>
             <h1>
-                Palyabevezetes
+                Pályabevezetés
             </h1>
         </header>
-        <span>Bejelentkezve mint: <%= bej %>, </span>
+        <span>Bejelentkezve mint: <%= bej %> </span>
         <%- include('partials/logButtons.ejs') %>
             <form action="/palyabevezet" method="POST">
-                <label for="palyak">Valassz egy palyat: </label>
+                <label for="palyak">Válassz egy pályát: </label>
                 <select name="palyak" id="palyak" required>
-                    <option value="kosar">Kosar</option>
+                    <option value="kosar">Kosár</option>
                     <option value="foci">Foci</option>
                     <option value="tenisz">Tenisz</option>
-                    <option value="futas">Futas</option>
+                    <option value="futas">Futás</option>
                 </select>
-                <label for="f0oraber">Add meg az orabert: </label>
+                <label for="f0oraber">Add meg az órabért: </label>
                 <input type="number" name="f0oraber" id="f0oraber" min="0" max="100000" required>
-                <label for="f0cim">Add meg a cimet: </label>
+                <label for="f0cim">Add meg a címet: </label>
                 <input type="text" name="f0cim" id="f0cim" required>
-                <label for="f0leiras">Add meg a leirast: </label>
+                <label for="f0leiras">Add meg a leírást: </label>
                 <input type="text" name="f0leiras" id="f0leiras" required>
-                <label for="f0kezd">Nyitas: </label>
+                <label for="f0kezd">Nyitás: </label>
                 <input type="time" name="f0kezd" id="f0kezd" required>
-                <label for="f0vegez">Zaras: </label>
+                <label for="f0vegez">Zárás: </label>
                 <input type="time" name="f0vegez" id="f0vegez" required>
                 <button type="submit">Submit</button>
             </form>
@@ -38,7 +38,7 @@
                 </p>
                 <% } %>
                     <form action="/" method="GET">
-                        <button type="submit">Vissza a fooldalra</button>
+                        <button type="submit">Vissza a főoldalra</button>
                     </form>
                     <%- include('partials/footer.ejs') %>
 

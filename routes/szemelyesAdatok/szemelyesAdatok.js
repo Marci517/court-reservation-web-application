@@ -11,7 +11,7 @@ router.get('/adatok', (req, res) => {
     bejelentkezesEmail = req.session.email;
   } else {
     res.render('error', {
-      error: 'Az oldal nem elerheto!',
+      error: 'Az oldal nem elérhető!',
     });
     return;
   }
