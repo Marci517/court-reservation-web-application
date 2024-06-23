@@ -21,9 +21,11 @@ import requestFelhasznalok from './routes/felhasznalok/felhasznalok.js';
 import requestKezeles from './routes/felhasznalok/kezeles.js';
 import requestEngedely from './routes/felhasznalok/engedelykeresek.js';
 import apiRoutes from './api/index.js';
+import { checkUserExists } from './middleware/checkUserExists.js';
 
 const app = express();
 // bekotesek
+
 app.use(express.static(path.join(process.cwd(), 'static')));
 app.use(express.static(path.join(process.cwd(), 'uploadDir')));
 app.set('view engine', 'ejs');
@@ -37,6 +39,7 @@ app.use(
     saveUninitialized: true,
   }),
 );
+app.use(checkUserExists);
 app.use('', requestMain);
 app.use('', requestReszletek);
 app.use('', requestFoglalas);
